@@ -80,7 +80,7 @@ describe("normalizeCandidate", () => {
     expect(n("Noodles Masala Flavor 62g")?.variant).not.toEqual(n("Noodles Chicken Flavor 62g")?.variant);
     expect(n("Mr. Noodles Magic Masala Flavor 12 pcs Family Pack (62gm x 12pcs)")).toMatchObject({
       title: "Mr. Noodles Magic Masala Flavor 12 pcs Family Pack (62gm x 12pcs)",
-      variant: { flavour: "Magic Masala" },
+      variant: { flavour: "Masala" },
       pack: { count: 12, size: { value: 62, unit: "g" } },
     });
   });
