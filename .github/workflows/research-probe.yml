@@ -9,6 +9,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Plain server-side requests (robots + 2 product pages, 3s apart)
+        shell: bash {0}
         run: |
           ua="BDPriceScout-research/0.1 (+https://github.com/saikatnjm/bd-price-scout)"
           out=""
@@ -16,7 +17,7 @@ jobs:
             curl -sS -A "$ua" -H 'Accept: text/html' -D h.txt -o b.html -w '%{http_code} %{size_download}B %{time_total}s redirects=%{num_redirects}' "$u" > m.txt || true
             hdr=$(grep -iE '^(server|cf-ray|cf-mitigated|x-cache|cache-control|content-type|retry-after|x-ratelimit[^:]*):' h.txt | tr -d '\r' | tr '\n' ';')
             cookies=$(grep -i '^set-cookie:' h.txt | sed -E 's/^set-cookie: *([^=]+)=.*/\1/I' | tr -d '\r' | tr '\n' ',')
-            checks="info-table=$(grep -c 'product-info-table' b.html) og-price=$(grep -c 'product:price:amount' b.html) offer-price=$(grep -c 'itemprop="price"' b.html) sku=$(grep -c 'itemprop="sku"' b.html) ldjson=$(grep -c 'application/ld+json' b.html) options=$(grep -c 'name=\"option\[' b.html) challenge=$(grep -ciE 'captcha|cf-chl|just a moment|attention required' b.html)"
+            checks="info-table=$({ grep -c 'product-info-table' b.html || true; }) og-price=$({ grep -c 'product:price:amount' b.html || true; }) offer-price=$({ grep -c 'itemprop="price"' b.html || true; }) sku=$({ grep -c 'itemprop="sku"' b.html || true; }) ldjson=$({ grep -c 'application/ld+json' b.html || true; }) options=$({ grep -c 'name=\"option\[' b.html || true; }) challenge=$(grep -ciE 'captcha|cf-chl|just a moment|attention required' b.html)"
             line="$u -> $(cat m.txt) | $hdr cookies=$cookies | $checks"
             echo "$line"; out="$out$line%0A"
             sleep 3
