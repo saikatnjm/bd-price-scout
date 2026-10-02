@@ -17,7 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - run: .github/scripts/run.sh npm install --no-audit --no-fund
+      - run: >-
+          .github/scripts/run.sh bash -c 'npm install --no-audit --no-fund ||
+          { tail -n 45 ~/.npm/_logs/*-debug-0.log | cut -c1-220; exit 1; }'
       - name: Commit lockfile if changed
         run: |
           if git diff --quiet --exit-code -- package-lock.json && git ls-files --error-unmatch package-lock.json >/dev/null 2>&1; then
