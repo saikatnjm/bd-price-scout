@@ -159,3 +159,9 @@ Keep pack-size and bundle parsing for the normalization phase, unless it is need
   - 25472 (Rupchanda): Tk 1,000, sold out
   - Seller, SKU and brand matched each page's meta line.
 - **Seen live:** the brand field can hold a manufacturer name (e.g. "Bangladesh Edible Oil Ltd" for Rupchanda).
+
+## Product images (Phase 5, 2026-10-02)
+
+- **Source:** the JSON-LD `image`, an absolute https URL on `images.othoba.com`. The adapter only accepts Othoba image hosts.
+- **Hotlink protection:** the image host returns **403 for `.jpeg` images when the Referer is another site** (here `bd-price-scout.vercel.app`). It returns 200 with no Referer or an Othoba Referer. `.webp` images return 200 for every Referer. This matches Cloudflare hotlink protection.
+- **Decision:** we don't strip the Referer and don't proxy the images, because either would get around a protection the store chose to apply. Blocked images fall back to a "No image" placeholder; WebP images display normally.
