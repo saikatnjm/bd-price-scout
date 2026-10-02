@@ -17,6 +17,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - name: Report latest versions of direct dependencies
+        run: |
+          msg=$(node -e 'const p=require("./package.json");console.log(Object.keys({...p.dependencies,...p.devDependencies}).join(" "))' \
+            | tr ' ' '\n' | while read -r d; do echo "$d $(npm view "$d" version) peer=$(npm view "$d" peerDependencies --json 2>/dev/null | tr -d '\n ' | cut -c1-200)"; done)
+          echo "::notice title=Latest versions::$(echo "$msg" | awk 'BEGIN{ORS="%0A"} {print}')"
       - run: >-
           .github/scripts/run.sh bash -c 'npm install --no-audit --no-fund ||
           { tail -n 45 ~/.npm/_logs/*-debug-0.log | cut -c1-220; exit 1; }'
