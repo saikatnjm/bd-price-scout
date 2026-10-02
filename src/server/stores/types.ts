@@ -17,6 +17,10 @@ export interface StoreCandidate {
   /** Marketplace seller, when the store is a marketplace. */
   seller?: string;
   category?: string;
+  /** Raw GTIN/EAN/UPC as published; validated during normalization. */
+  gtin?: string;
+  /** Manufacturer model identifier as published. */
+  model?: string;
 }
 
 export interface StoreSearchContext {

@@ -1,6 +1,6 @@
 import "server-only";
 import * as cheerio from "cheerio";
-import type { Availability } from "@/lib/types";
+import { normalizeAvailability } from "@/server/normalize/fields";
 import type { StoreCandidate } from "../types";
 
 export const OTHOBA_ORIGIN = "https://othoba.com";
@@ -71,13 +71,6 @@ function money(value: unknown): number | null {
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
-function availability(value: unknown): Availability {
-  const v = typeof value === "string" ? value.replace(/^https?:\/\/schema\.org\//i, "").toLowerCase() : "";
-  if (v === "instock" || v === "limitedavailability" || v === "onlineonly") return "in_stock";
-  if (v === "outofstock" || v === "soldout" || v === "discontinued") return "out_of_stock";
-  if (v === "preorder" || v === "presale") return "preorder";
-  return "unknown";
-}
 
 export function parseCategoryPage(html: string): OthobaCategoryPage {
   const $ = cheerio.load(html);
@@ -153,7 +146,7 @@ export function parseProductPage(html: string, pageUrl: string): StoreCandidate 
     url: othobaUrl(offer.url) ?? othobaUrl(product.url) ?? pageUrl,
     price,
     regularPrice: price === null ? null : regularPrice,
-    availability: availability(offer.availability),
+    availability: normalizeAvailability(offer.availability),
     imageUrl: imageUrl(Array.isArray(product.image) ? product.image[0] : product.image),
     storeProductId: text(product.id),
     sku: text(product.sku) ?? text(offer.sku),

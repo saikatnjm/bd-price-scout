@@ -2,6 +2,32 @@
 
 export type Availability = "in_stock" | "out_of_stock" | "preorder" | "coming_soon" | "unknown";
 
+export type SizeUnit = "g" | "kg" | "ml" | "l";
+
+/**
+ * Package information parsed conservatively from the product name. Fields are absent
+ * when the name does not state them unambiguously; nothing is guessed.
+ */
+export interface PackageInfo {
+  /** Size of one item as written, e.g. 5 l, 62 g. */
+  size?: { value: number; unit: SizeUnit };
+  /** Number of items in the pack when stated (e.g. "12 pcs", "10 x 15g", "Pack of 6"). */
+  count?: number;
+  /** count > 1. */
+  multipack: boolean;
+  /** Bundle / combo / buy-one-get-one wording in the name. */
+  bundle: boolean;
+  /** Total content in base units (g, ml) or pieces, only when computable from stated values. */
+  total?: { value: number; unit: "g" | "ml" | "piece" };
+}
+
+/** Variant attributes stated explicitly in the name (e.g. "Masala Flavor"). */
+export interface VariantInfo {
+  flavour?: string;
+  scent?: string;
+  colour?: string;
+}
+
 export type StoreStatusKind = "ok" | "empty" | "timeout" | "blocked" | "error";
 
 export interface Offer {
@@ -23,6 +49,14 @@ export interface Offer {
   /** Marketplace seller, when the store is a marketplace. */
   seller?: string;
   category?: string;
+  /** Validated GTIN/EAN/UPC (checksum verified), when the store publishes one. */
+  gtin?: string;
+  /** Manufacturer model identifier, when the store publishes one. */
+  model?: string;
+  /** Present only when both current and original prices are known and original > current. */
+  discount?: { amount: number; percent: number };
+  pack?: PackageInfo;
+  variant?: VariantInfo;
   checkedAt: string;
 }
 

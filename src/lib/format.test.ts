@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatBdt, isSafeHttpUrl } from "./format";
+import { formatBdt, formatPack, isSafeHttpUrl } from "./format";
 
 describe("formatBdt", () => {
   it("uses lakh grouping", () => {
@@ -15,5 +15,16 @@ describe("isSafeHttpUrl", () => {
     expect(isSafeHttpUrl("javascript:alert(1)")).toBe(false);
     expect(isSafeHttpUrl("data:text/html,hi")).toBe(false);
     expect(isSafeHttpUrl("/relative")).toBe(false);
+  });
+});
+
+describe("formatPack", () => {
+  it("summarises known package info only", () => {
+    expect(formatPack({ size: { value: 5, unit: "l" }, multipack: false, bundle: false })).toBe("5 L");
+    expect(formatPack({ size: { value: 62, unit: "g" }, count: 12, multipack: true, bundle: false })).toBe("12 × 62 g");
+    expect(formatPack({ count: 3, multipack: true, bundle: false })).toBe("3 pcs");
+    expect(formatPack({ size: { value: 5, unit: "l" }, count: 4, multipack: true, bundle: true })).toBe("4 × 5 L · Bundle");
+    expect(formatPack({ multipack: false, bundle: false })).toBeUndefined();
+    expect(formatPack(undefined)).toBeUndefined();
   });
 });

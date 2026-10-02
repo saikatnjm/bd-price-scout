@@ -1,4 +1,4 @@
-import { formatBdt, isSafeHttpUrl } from "@/lib/format";
+import { formatBdt, formatPack, isSafeHttpUrl } from "@/lib/format";
 import type { Availability, Offer, SearchResponse, StoreStatus } from "@/lib/types";
 import { ProductImage } from "./ProductImage";
 
@@ -28,7 +28,9 @@ const storeStatusLabel: Record<StoreStatus["status"], string> = {
 
 function OfferCard({ offer }: { offer: Offer }) {
   const details = [offer.brand, offer.seller ? `Seller: ${offer.seller}` : undefined].filter(Boolean).join(" · ");
-  const saving = offer.price !== null && offer.regularPrice !== null ? offer.regularPrice - offer.price : null;
+  const pack = formatPack(offer.pack);
+  const saving =
+    offer.discount?.amount ?? (offer.price !== null && offer.regularPrice !== null ? offer.regularPrice - offer.price : null);
   const imageSrc = offer.imageUrl && isSafeHttpUrl(offer.imageUrl) ? offer.imageUrl : undefined;
 
   return (
@@ -36,6 +38,11 @@ function OfferCard({ offer }: { offer: Offer }) {
       <ProductImage src={imageSrc} alt={offer.title} />
       <div className="min-w-0 flex-1">
         <p className="font-medium break-words">{offer.title}</p>
+        {pack && (
+          <p className="mt-1 inline-block rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+            {pack}
+          </p>
+        )}
         {details && <p className="mt-0.5 text-xs text-slate-500">{details}</p>}
         <p className="mt-1 text-xs">
           <span className="text-slate-500">{offer.storeName} · </span>

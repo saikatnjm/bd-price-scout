@@ -1,6 +1,7 @@
 import "server-only";
 import type { Offer, SearchResponse, StoreStatus } from "@/lib/types";
 import type { SearchConfig } from "../config";
+import { normalizeCandidate } from "../normalize/product";
 import { StoreBlockedError, StoreError, type StoreAdapter } from "../stores/types";
 
 class StoreTimeoutError extends Error {}
@@ -37,7 +38,9 @@ async function searchStore(
   try {
     const candidates = await untilAborted(adapter.search(query, { signal }), signal);
     const checkedAt = new Date().toISOString();
-    const offers: Offer[] = candidates.map((c) => ({ ...base, ...c, currency: "BDT", checkedAt }));
+    const offers = candidates
+      .map((c) => normalizeCandidate(c, base, checkedAt))
+      .filter((o): o is Offer => o !== null);
     return {
       offers,
       status: {

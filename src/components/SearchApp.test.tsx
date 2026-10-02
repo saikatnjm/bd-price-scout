@@ -47,7 +47,7 @@ describe("SearchApp", () => {
         { storeId: "b", storeName: "Store B", status: "timeout", durationMs: 8000, resultCount: 0 },
       ],
       results: [
-        { storeId: "a", storeName: "Store A", title: "Fresh Soybean Oil 5ltr", url: "https://a.example/1", price: 990, regularPrice: 1000, currency: "BDT", availability: "in_stock", imageUrl: "https://img.a.example/1.webp", brand: "Fresh", seller: "Meghna", checkedAt: "" },
+        { storeId: "a", storeName: "Store A", title: "Fresh Soybean Oil 5ltr", url: "https://a.example/1", price: 990, regularPrice: 1000, currency: "BDT", availability: "in_stock", imageUrl: "https://img.a.example/1.webp", brand: "Fresh", seller: "Meghna", pack: { size: { value: 5, unit: "l" }, multipack: false, bundle: false, total: { value: 5000, unit: "ml" } }, checkedAt: "" },
         { storeId: "a", storeName: "Store A", title: "Phone 2", url: "javascript:alert(1)", price: null, regularPrice: null, currency: "BDT", availability: "out_of_stock", checkedAt: "" },
       ],
     };
@@ -60,6 +60,7 @@ describe("SearchApp", () => {
     expect(screen.getByText("৳1,000")).toBeTruthy();
     expect(screen.getByText(/Save ৳10/)).toBeTruthy();
     expect(screen.getByText("Fresh · Seller: Meghna")).toBeTruthy();
+    expect(screen.getByText("5 L")).toBeTruthy();
     expect(screen.getByText("In stock")).toBeTruthy();
     expect(screen.getByText("Out of stock")).toBeTruthy();
     expect(screen.getByText("Price unavailable")).toBeTruthy();
