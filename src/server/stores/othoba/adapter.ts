@@ -17,9 +17,11 @@ function cardMatches(card: OthobaCard, tokens: readonly string[]): boolean {
 }
 
 /** Runs every task and throws the first error only if none succeeded. */
-async function allOrFirstError<T>(tasks: Promise<T>[]): Promise<T[]> {
+async function allOrFirstError<T>(tasks: Promise<T>[]): Promise<Awaited<T>[]> {
   const settled = await Promise.allSettled(tasks);
-  const ok = settled.filter((s): s is PromiseFulfilledResult<T> => s.status === "fulfilled").map((s) => s.value);
+  const ok = settled
+    .filter((s): s is PromiseFulfilledResult<Awaited<T>> => s.status === "fulfilled")
+    .map((s) => s.value);
   const failed = settled.find((s): s is PromiseRejectedResult => s.status === "rejected");
   if (ok.length === 0 && failed) throw failed.reason;
   return ok;
