@@ -2,7 +2,7 @@
 
 Private Next.js app for comparing product prices across Bangladesh online stores. Deployed on Vercel; no database.
 
-**Status:** Phase 1 (foundation). There are no store adapters yet, so searches return no results.
+**Status:** Phase 4 (first store adapter). Supported store: **Othoba**. It covers grocery and household categories only; see `docs/stores/othoba.md`.
 
 ## Local development (Docker only)
 

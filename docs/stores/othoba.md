@@ -66,7 +66,7 @@ All from the JSON-LD `Product` unless noted.
 | Regular price | JSON-LD `offers.price` **when `sale_price` is present** | Oil: `price` 1000.00, `sale_price` 990.00. The page shows "Tk 990 / Tk 1,000 / 10 TK OFF". |
 | Discount | derived; page text "10 TK OFF" or "1% OFF" | |
 | Currency | `offers.priceCurrency` | `BDT`; the page shows "Tk". |
-| Availability | `offers.availability` | `http://schema.org/InStock`. Out of stock was **not observed**. |
+| Availability | `offers.availability` | `http://schema.org/InStock`; `http://schema.org/OutOfStock` (observed in Phase 4: the page shows a "SoldOut" button while the price stays visible). |
 | Seller | `offers.seller`; `custom_label_0`; HTML "Seller:" | "Meghna Group of Industries" vs "Meghna Group of Industries Rajshahi". |
 | Warranty | HTML | "Warranty Not Available" for groceries. |
 
@@ -128,7 +128,7 @@ All from the JSON-LD `Product` unless noted.
 - **Text search is disallowed by `robots.txt`.** Discovery through categories has limited recall and needs a maintained category map.
 - **Prices aren't in category HTML**, so price comparison needs product-page fetches (about 160 KB each).
 - **Terms:** no terms-and-conditions page was found (`/conditions-of-use` and other likely paths redirect home; the footer has only cancellation, privacy and EMI policies). The privacy policy has no clause about automated access. **[unverified]** whether terms exist elsewhere, e.g. in the app or at registration.
-- **Out of stock and pre-order** were not observed. Unrecognized values must map to `unknown`.
+- **Out of stock** was observed in Phase 4 (`OutOfStock` with a "SoldOut" button). **Pre-order** was not observed. Unrecognized values map to `unknown`.
 - **Data quality varies by seller:** brand is sometimes empty and MPN is inconsistent.
 - **Cloudflare** is in front of the site. No challenge so far; if one appears, report the store as `blocked`. No bypass.
 - **No location dependence** was observed: there is no store or area selector on product pages. **[unverified]**.
@@ -147,3 +147,15 @@ Use saved HTML fixtures for:
 - a category page
 
 Keep pack-size and bundle parsing for the normalization phase, unless it is needed to avoid misleading results.
+
+## Phase 4 implementation notes (2026-10-02)
+
+- **Adapter:** `src/server/stores/othoba/`. The category map, parsers and search flow live there. The shared safe fetch is `src/server/http/fetch-html.ts`.
+- **Request budget per search:** at most 2 categories, 2 pages each, then at most 5 product pages.
+- **Out of coverage:** queries that don't name a mapped category return no results without any request.
+- **Live check, 2026-10-02:** "soybean oil 5 ltr" returned 5 products, in about 2.8 s from a GitHub runner. The fields matched the store pages:
+  - 709817: Tk 990, regular 1000, in stock
+  - 881121: 4-piece bundle, Tk 3,940, regular 4000
+  - 25472 (Rupchanda): Tk 1,000, sold out
+  - Seller, SKU and brand matched each page's meta line.
+- **Seen live:** the brand field can hold a manufacturer name (e.g. "Bangladesh Edible Oil Ltd" for Rupchanda).
