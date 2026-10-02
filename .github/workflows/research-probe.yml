@@ -19,4 +19,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: .github/scripts/run.sh npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose
+      - name: Live check (compact fields)
+        shell: bash {0}
+        run: |
+          npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose > out.txt 2>&1; code=$?
+          msg=$(grep -E '"(title|price|regularPrice|availability|url|seller|brand|sku|storeProductId)"' out.txt | sed 's/^ *//' | tr -d '\r' | awk 'BEGIN{ORS="%0A"} {print}')
+          echo "::notice title=live-fields::$msg"
+          tail -n 5 out.txt; exit $code
