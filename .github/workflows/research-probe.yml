@@ -4,25 +4,21 @@ on: push
 permissions:
   contents: read
 jobs:
-  live:
+  images:
     if: "!contains(github.event.head_commit.message, '[skip probe]')"
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    env:
-      LIVE_STORE_TESTS: "1"
+    timeout-minutes: 3
     steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: dev
-      - uses: actions/setup-node@v5
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - name: Live check (compact fields)
+      - name: Image responses by Referer (3 requests per image, 2s apart)
         shell: bash {0}
         run: |
-          npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose > out.txt 2>&1; code=$?
-          msg=$(grep -E '"(title|price|regularPrice|availability|url|seller|brand|sku|storeProductId)"' out.txt | sed 's/^ *//' | tr -d '\r' | awk 'BEGIN{ORS="%0A"} {print}')
-          echo "::notice title=live-fields::$msg"
-          tail -n 5 out.txt; exit $code
+          out=""
+          for img in https://images.othoba.com/images/thumbs/0951806_starship-soyabean-oil-5ltr.jpeg https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp; do
+            for ref in "" "https://othoba.com/" "https://bd-price-scout.vercel.app/"; do
+              args=(-sS -o /dev/null -D h.txt -w '%{http_code} %{content_type} %{size_download}B')
+              [ -n "$ref" ] && args+=(-e "$ref")
+              r=$(curl "${args[@]}" "$img"); srv=$(grep -iE '^(server|x-cache|cf-cache-status):' h.txt | tr -d '\r' | tr '\n' ' ')
+              line="${img##*/} referer=[${ref:-none}] -> $r | $srv"; echo "$line"; out="$out$line%0A"; sleep 2
+            done
+          done
+          echo "::notice title=probe::$out"
