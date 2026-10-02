@@ -1,4 +1,4 @@
-# TEMPORARY research probe (Phase 3). Not part of the app; branch is deleted after use.
+# TEMPORARY research probe (Phase 3). Not part of the app; branch to be deleted.
 name: Research probe
 on: push
 permissions:
@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Plain server-side requests (robots + 2 product pages, 3s apart)
+      - name: Plain server-side requests to Shwapno (robots + 2 product pages, 3s apart)
         shell: bash {0}
         run: |
           ua="BDPriceScout-research/0.1 (+https://github.com/saikatnjm/bd-price-scout)"
           out=""
-          for u in https://www.startech.com.bd/robots.txt https://www.startech.com.bd/iphone-17 https://www.startech.com.bd/samsung-galaxy-s25-fe; do
+          for u in https://www.shwapno.com/robots.txt https://www.shwapno.com/rupchanda-soyabean-oil-5liter https://www.shwapno.com/piyaj-local-loose-p-kg; do
             curl -sS -A "$ua" -H 'Accept: text/html' -D h.txt -o b.html -w '%{http_code} %{size_download}B %{time_total}s redirects=%{num_redirects}' "$u" > m.txt || true
             hdr=$(grep -iE '^(server|cf-ray|cf-mitigated|x-cache|cache-control|content-type|retry-after|x-ratelimit[^:]*):' h.txt | tr -d '\r' | tr '\n' ';')
             cookies=$(grep -i '^set-cookie:' h.txt | sed -E 's/^set-cookie: *([^=]+)=.*/\1/I' | tr -d '\r' | tr '\n' ',')
-            checks="info-table=$({ grep -c 'product-info-table' b.html || true; }) og-price=$({ grep -c 'product:price:amount' b.html || true; }) offer-price=$({ grep -c 'itemprop="price"' b.html || true; }) sku=$({ grep -c 'itemprop="sku"' b.html || true; }) ldjson=$({ grep -c 'application/ld+json' b.html || true; }) options=$({ grep -c 'name=\"option\[' b.html || true; }) challenge=$(grep -ciE 'captcha|cf-chl|just a moment|attention required' b.html)"
+            checks="next_f=$({ grep -c 'self.__next_f' b.html || true; }) ldProduct=$({ grep -c '@type\\\":\\\"Product' b.html || true; }) uomType=$({ grep -c 'uomType' b.html || true; }) priceValue=$({ grep -c 'priceValue' b.html || true; }) store=$(grep -o 'currentStoreName[^,]*' b.html | head -1 | tr -d '\\\"') challenge=$({ grep -ciE 'cf-chl|just a moment|attention required|captcha' b.html || true; })"
             line="$u -> $(cat m.txt) | $hdr cookies=$cookies | $checks"
             echo "$line"; out="$out$line%0A"
             sleep 3
