@@ -9,6 +9,14 @@ export interface StoreCandidate {
   regularPrice: number | null;
   availability: Availability;
   imageUrl?: string;
+  /** Store-internal product ID (not a cross-store identifier). */
+  storeProductId?: string;
+  /** Store/seller SKU as published by the store. */
+  sku?: string;
+  brand?: string;
+  /** Marketplace seller, when the store is a marketplace. */
+  seller?: string;
+  category?: string;
 }
 
 export interface StoreSearchContext {
@@ -33,5 +41,22 @@ export class StoreBlockedError extends Error {
   constructor(message = "Store blocked the request") {
     super(message);
     this.name = "StoreBlockedError";
+  }
+}
+
+export type StoreErrorKind = "http" | "invalid_response" | "parse";
+
+/**
+ * A controlled store failure. `message` is safe to show to users; internal details
+ * belong in `cause` and are only logged on the server.
+ */
+export class StoreError extends Error {
+  constructor(
+    readonly kind: StoreErrorKind,
+    message: string,
+    options?: { cause?: unknown },
+  ) {
+    super(message, options);
+    this.name = "StoreError";
   }
 }

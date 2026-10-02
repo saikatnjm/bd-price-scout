@@ -35,11 +35,15 @@ export function SearchResults({ data }: { data: SearchResponse }) {
               <div className="min-w-0">
                 <p className="font-medium break-words">{offer.title}</p>
                 <p className="mt-1 text-xs text-slate-500">
-                  {offer.storeName} · {availabilityLabel[offer.availability]}
+                  {offer.storeName}
+                  {offer.seller ? ` · Seller: ${offer.seller}` : ""} · {availabilityLabel[offer.availability]}
                 </p>
               </div>
               <div className="shrink-0 text-right">
                 <p className="font-semibold">{offer.price === null ? "Price unavailable" : formatBdt(offer.price)}</p>
+                {offer.price !== null && offer.regularPrice !== null && (
+                  <p className="text-xs text-slate-500 line-through">{formatBdt(offer.regularPrice)}</p>
+                )}
                 {isSafeHttpUrl(offer.url) && (
                   <a href={offer.url} target="_blank" rel="noopener noreferrer nofollow" className="text-xs text-emerald-700 underline dark:text-emerald-400">
                     View at store

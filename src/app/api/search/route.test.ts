@@ -1,5 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
+
+// Route behaviour is tested without real store adapters (no network in unit tests).
+vi.mock("@/server/stores/registry", () => ({ storeAdapters: [] }));
 
 function post(body: string): Request {
   return new Request("http://localhost/api/search", {

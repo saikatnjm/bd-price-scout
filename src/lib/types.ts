@@ -16,6 +16,13 @@ export interface Offer {
   currency: "BDT";
   availability: Availability;
   imageUrl?: string;
+  /** Store-internal product ID (not a cross-store identifier). */
+  storeProductId?: string;
+  sku?: string;
+  brand?: string;
+  /** Marketplace seller, when the store is a marketplace. */
+  seller?: string;
+  category?: string;
   checkedAt: string;
 }
 

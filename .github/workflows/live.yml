@@ -1,0 +1,24 @@
+# Manually triggered live check of store adapters against the real stores.
+# Never runs automatically, so normal CI makes no requests to stores.
+name: Live store check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      LIVE_STORE_TESTS: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: .github/scripts/run.sh npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose

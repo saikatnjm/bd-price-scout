@@ -1,7 +1,7 @@
 import "server-only";
 import type { Offer, SearchResponse, StoreStatus } from "@/lib/types";
 import type { SearchConfig } from "../config";
-import { StoreBlockedError, type StoreAdapter } from "../stores/types";
+import { StoreBlockedError, StoreError, type StoreAdapter } from "../stores/types";
 
 class StoreTimeoutError extends Error {}
 
@@ -62,7 +62,9 @@ async function searchStore(
           ? "Store took too long to respond."
           : blocked
             ? "Store refused the request."
-            : "Store search failed.",
+            : err instanceof StoreError
+              ? err.message
+              : "Store search failed.",
       },
     };
   }
