@@ -2,14 +2,14 @@
 
 export type Availability = "in_stock" | "out_of_stock" | "preorder" | "coming_soon" | "unknown";
 
-export type SizeUnit = "g" | "kg" | "ml" | "l";
+export type SizeUnit = "g" | "kg" | "ml" | "l" | "sheet";
 
 /**
  * Package information parsed conservatively from the product name. Fields are absent
  * when the name does not state them unambiguously; nothing is guessed.
  */
 export interface PackageInfo {
-  /** Size of one item as written, e.g. 5 l, 62 g. */
+  /** Size of one item as written, e.g. 5 l, 62 g, 100 sheets. */
   size?: { value: number; unit: SizeUnit };
   /** Number of items in the pack when stated (e.g. "12 pcs", "10 x 15g", "Pack of 6"). */
   count?: number;
@@ -18,7 +18,7 @@ export interface PackageInfo {
   /** Bundle / combo / buy-one-get-one wording in the name. */
   bundle: boolean;
   /** Total content in base units (g, ml) or pieces, only when computable from stated values. */
-  total?: { value: number; unit: "g" | "ml" | "piece" };
+  total?: { value: number; unit: "g" | "ml" | "sheet" | "piece" };
 }
 
 /** Variant attributes stated explicitly in the name (e.g. "Masala Flavor"). */

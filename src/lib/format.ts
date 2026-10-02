@@ -17,7 +17,7 @@ export function isSafeHttpUrl(value: string): boolean {
   }
 }
 
-const UNIT_LABEL: Record<string, string> = { g: "g", kg: "kg", ml: "ml", l: "L" };
+const UNIT_LABEL: Record<string, string> = { g: "g", kg: "kg", ml: "ml", l: "L", sheet: "sheets" };
 
 /** Short package summary, e.g. "5 L", "12 × 62 g", "4 × 5 L · Bundle"; undefined if nothing is known. */
 export function formatPack(pack: PackageInfo | undefined): string | undefined {

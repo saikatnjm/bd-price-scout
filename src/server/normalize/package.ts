@@ -6,12 +6,13 @@ const UNIT_ALIASES: Record<string, SizeUnit> = {
   kg: "kg", kgs: "kg",
   ml: "ml",
   l: "l", lt: "l", ltr: "l", ltrs: "l", litre: "l", litres: "l", liter: "l", liters: "l",
+  sheet: "sheet", sheets: "sheet",
 };
 
 const NUM = String.raw`(\d+(?:\.\d+)?)`;
 // Weight tolerance as written by BD stores, e.g. "180(±)10ml" means 180 ml.
 const TOLERANCE = String.raw`(?:\s*\(\s*[±+\-/]+\s*\)\s*\d+(?:\.\d+)?)?`;
-const UNIT = String.raw`(kgs?|gms?|grams?|gr|g|ml|ltrs?|lt|litres?|liters?|l)`;
+const UNIT = String.raw`(kgs?|gms?|grams?|gr|g|ml|ltrs?|lt|litres?|liters?|l|sheets?)`;
 const END = String.raw`(?![a-z])`;
 const COUNT_WORD = String.raw`(?:pcs|pc|pieces?|packs?|sachets?|rolls?|tablets?)`;
 
@@ -31,7 +32,7 @@ interface Size {
   unit: SizeUnit;
 }
 
-function toBase(size: Size): { value: number; unit: "g" | "ml" } {
+function toBase(size: Size): { value: number; unit: "g" | "ml" | "sheet" } {
   if (size.unit === "kg") return { value: round(size.value * 1000), unit: "g" };
   if (size.unit === "l") return { value: round(size.value * 1000), unit: "ml" };
   return { value: size.value, unit: size.unit };

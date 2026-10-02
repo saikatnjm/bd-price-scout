@@ -25,6 +25,14 @@ describe("parsePackage: quantity and unit", () => {
   });
 });
 
+describe("parsePackage: sheets", () => {
+  it("reads sheet counts as a size, keeping 100 and 200 sheets different", () => {
+    expect(parsePackage("Bashundhara Tissue 100 Sheets")).toMatchObject({ size: { value: 100, unit: "sheet" }, total: { value: 100, unit: "sheet" } });
+    expect(parsePackage("Tissue 200 sheets").total).toEqual({ value: 200, unit: "sheet" });
+    expect(parsePackage("Kitchen Towel 100 sheets x 6 rolls")).toMatchObject({ count: 6, total: { value: 600, unit: "sheet" } });
+  });
+});
+
 describe("parsePackage: pieces, multipacks and bundles", () => {
   it("1 piece vs 3 pieces", () => {
     expect(parsePackage("Lux Soap 1 pc")).toMatchObject({ count: 1, multipack: false, total: { value: 1, unit: "piece" } });
