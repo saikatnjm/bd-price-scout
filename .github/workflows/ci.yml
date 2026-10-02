@@ -25,11 +25,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+      - run: .github/scripts/run.sh npm ci
+      - run: .github/scripts/run.sh npm run lint
+      - run: .github/scripts/run.sh npm run typecheck
+      - run: .github/scripts/run.sh npm test
+      - run: .github/scripts/run.sh npm run build
 
   docker:
     runs-on: ubuntu-latest
@@ -37,6 +37,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build local dev image
-        run: docker compose build
+        run: .github/scripts/run.sh docker compose build
       - name: Run tests inside the dev container
-        run: docker compose run --rm app npm test
+        run: .github/scripts/run.sh docker compose run --rm app npm test
