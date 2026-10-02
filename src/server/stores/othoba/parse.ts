@@ -52,11 +52,15 @@ function othobaUrl(value: unknown): string | undefined {
   }
 }
 
-function httpsUrl(value: unknown): string | undefined {
-  if (typeof value !== "string") return undefined;
+// Product images are served from Othoba's own image host (observed in JSON-LD).
+const OTHOBA_IMAGE_HOSTS: readonly string[] = ["images.othoba.com", "othoba.com"];
+
+/** Absolute https product image URL on Othoba's image host, or undefined. */
+function imageUrl(value: unknown): string | undefined {
+  if (typeof value !== "string" || value.trim() === "") return undefined;
   try {
-    const url = new URL(value.trim());
-    return url.protocol === "https:" ? url.toString() : undefined;
+    const url = new URL(value.trim(), OTHOBA_ORIGIN);
+    return url.protocol === "https:" && OTHOBA_IMAGE_HOSTS.includes(url.hostname) ? url.toString() : undefined;
   } catch {
     return undefined;
   }
@@ -150,7 +154,7 @@ export function parseProductPage(html: string, pageUrl: string): StoreCandidate 
     price,
     regularPrice: price === null ? null : regularPrice,
     availability: availability(offer.availability),
-    imageUrl: httpsUrl(product.image),
+    imageUrl: imageUrl(Array.isArray(product.image) ? product.image[0] : product.image),
     storeProductId: text(product.id),
     sku: text(product.sku) ?? text(offer.sku),
     brand: text(product.brand),

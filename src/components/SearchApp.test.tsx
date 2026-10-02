@@ -38,7 +38,7 @@ describe("SearchApp", () => {
     expect(await screen.findByText("No stores are configured yet.")).toBeTruthy();
   });
 
-  it("renders results and only links safe URLs", async () => {
+  it("renders real-shaped results: name, image, price, discount, availability, seller and link", async () => {
     const data: SearchResponse = {
       query: "Phone",
       searchedAt: new Date().toISOString(),
@@ -47,18 +47,83 @@ describe("SearchApp", () => {
         { storeId: "b", storeName: "Store B", status: "timeout", durationMs: 8000, resultCount: 0 },
       ],
       results: [
-        { storeId: "a", storeName: "Store A", title: "Phone 1", url: "https://a.example/1", price: 125000, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
-        { storeId: "a", storeName: "Store A", title: "Phone 2", url: "javascript:alert(1)", price: null, regularPrice: null, currency: "BDT", availability: "unknown", checkedAt: "" },
+        { storeId: "a", storeName: "Store A", title: "Fresh Soybean Oil 5ltr", url: "https://a.example/1", price: 990, regularPrice: 1000, currency: "BDT", availability: "in_stock", imageUrl: "https://img.a.example/1.webp", brand: "Fresh", seller: "Meghna", checkedAt: "" },
+        { storeId: "a", storeName: "Store A", title: "Phone 2", url: "javascript:alert(1)", price: null, regularPrice: null, currency: "BDT", availability: "out_of_stock", checkedAt: "" },
       ],
     };
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(data)));
     render(<SearchApp />);
 
     search("Phone");
-    expect(await screen.findByText("৳1,25,000")).toBeTruthy();
+    expect(await screen.findByText("Fresh Soybean Oil 5ltr")).toBeTruthy();
+    expect(screen.getByText("৳990")).toBeTruthy();
+    expect(screen.getByText("৳1,000")).toBeTruthy();
+    expect(screen.getByText(/Save ৳10/)).toBeTruthy();
+    expect(screen.getByText("Fresh · Seller: Meghna")).toBeTruthy();
+    expect(screen.getByText("In stock")).toBeTruthy();
+    expect(screen.getByText("Out of stock")).toBeTruthy();
     expect(screen.getByText("Price unavailable")).toBeTruthy();
-    expect(screen.getAllByRole("link", { name: "View at store" })).toHaveLength(1);
+    expect((screen.getByRole("img", { name: "Fresh Soybean Oil 5ltr" }) as HTMLImageElement).src).toBe("https://img.a.example/1.webp");
+    // Missing image: placeholder instead of a broken image.
+    expect(screen.getByRole("img", { name: "No image available" })).toBeTruthy();
+    // Only the safe http(s) link is rendered.
+    const links = screen.getAllByRole("link", { name: "View product" }) as HTMLAnchorElement[];
+    expect(links.map((l) => l.href)).toEqual(["https://a.example/1"]);
+    expect(links[0]?.target).toBe("_blank");
     expect(screen.getByRole("note").textContent).toContain("Store B (Timed out)");
+  });
+
+  it("replaces a broken image with the placeholder", async () => {
+    const data: SearchResponse = {
+      query: "oil", searchedAt: new Date().toISOString(),
+      stores: [{ storeId: "a", storeName: "Store A", status: "ok", durationMs: 10, resultCount: 1 }],
+      results: [{ storeId: "a", storeName: "Store A", title: "Oil 1L", url: "https://a.example/1", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", imageUrl: "https://img.a.example/blocked.jpeg", checkedAt: "" }],
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(data)));
+    render(<SearchApp />);
+    search("oil");
+    fireEvent.error(await screen.findByRole("img", { name: "Oil 1L" }));
+    expect(screen.getByRole("img", { name: "No image available" })).toBeTruthy();
+    expect(screen.getByText("Oil 1L")).toBeTruthy();
+  });
+
+  it("drops a malformed result but still renders the valid ones", async () => {
+    const body = {
+      query: "oil", searchedAt: new Date().toISOString(),
+      stores: [{ storeId: "a", storeName: "Store A", status: "ok", durationMs: 10, resultCount: 2 }],
+      results: [
+        { storeId: "a", storeName: "Store A", title: "Good Oil", url: "https://a.example/1", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
+        { storeId: "a", storeName: "Store A", title: 42, url: null, price: "free", availability: "maybe" },
+      ],
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(body)));
+    render(<SearchApp />);
+    search("oil");
+    expect(await screen.findByText("Good Oil")).toBeTruthy();
+    expect(screen.getAllByRole("listitem")).toHaveLength(1);
+  });
+
+  it("shows no-results and all-stores-failed states", async () => {
+    const empty: SearchResponse = { query: "xyz", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "empty", durationMs: 5, resultCount: 0 }] };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(empty)));
+    render(<SearchApp />);
+    search("xyz");
+    expect(await screen.findByText("No products found for “xyz”.")).toBeTruthy();
+    cleanup();
+
+    const failed: SearchResponse = { query: "oil", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "error", durationMs: 5, resultCount: 0, message: "Store returned an error (HTTP 500)." }] };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(failed)));
+    render(<SearchApp />);
+    search("oil");
+    expect(await screen.findByText("Stores could not be searched right now. Please try again.")).toBeTruthy();
+    expect(screen.getByRole("note").textContent).toContain("Store A (Failed: Store returned an error (HTTP 500).)");
+  });
+
+  it("shows an error for an invalid API payload", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ nope: true })));
+    render(<SearchApp />);
+    search("oil");
+    expect((await screen.findByRole("alert")).textContent).toContain("invalid response");
   });
 
   it("shows the API error message", async () => {

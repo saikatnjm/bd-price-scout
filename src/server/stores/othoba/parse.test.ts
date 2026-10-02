@@ -77,6 +77,15 @@ describe("parseProductPage (edge cases)", () => {
     expect(priced({}, "120.00")?.price).toBe(120);
   });
 
+  it("keeps Othoba-hosted images (resolving relative paths) and drops others", () => {
+    const img = (image: unknown) => parseProductPage(productHtml({ ...base, image }), "https://othoba.com/x")?.imageUrl;
+    expect(img("https://images.othoba.com/images/thumbs/1_a.webp")).toBe("https://images.othoba.com/images/thumbs/1_a.webp");
+    expect(img("/images/thumbs/2_b.jpeg")).toBe("https://othoba.com/images/thumbs/2_b.jpeg");
+    expect(img(["https://images.othoba.com/images/thumbs/3_c.webp"])).toBe("https://images.othoba.com/images/thumbs/3_c.webp");
+    expect(img("https://cdn.evil.example/x.jpg")).toBeUndefined();
+    expect(img("http://images.othoba.com/x.jpg")).toBeUndefined();
+  });
+
   it("leaves missing optional fields absent and rejects foreign URLs", () => {
     const p = parseProductPage(
       productHtml({ ...base, brand: "", sku: "", url: "https://evil.example/p", image: "javascript:x" }),
