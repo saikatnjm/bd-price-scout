@@ -2,6 +2,9 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SearchResponse } from "@/lib/types";
+
+// What the API sends; the client builds `groups` itself when they are absent.
+type ApiBody = Omit<SearchResponse, "groups">;
 import { SearchApp } from "./SearchApp";
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -33,13 +36,13 @@ describe("SearchApp", () => {
     expect(await screen.findByRole("status")).toBeTruthy();
     expect((screen.getByRole("button", { name: "Searching…" }) as HTMLButtonElement).disabled).toBe(true);
 
-    const data: SearchResponse = { query: "Galaxy S25", results: [], stores: [], searchedAt: new Date().toISOString() };
+    const data: ApiBody = { query: "Galaxy S25", results: [], stores: [], searchedAt: new Date().toISOString() };
     resolve(jsonResponse(data));
     expect(await screen.findByText("No stores are configured yet.")).toBeTruthy();
   });
 
   it("renders real-shaped results: name, image, price, discount, availability, seller and link", async () => {
-    const data: SearchResponse = {
+    const data: ApiBody = {
       query: "Phone",
       searchedAt: new Date().toISOString(),
       stores: [
@@ -59,7 +62,8 @@ describe("SearchApp", () => {
     expect(screen.getByText("৳990")).toBeTruthy();
     expect(screen.getByText("৳1,000")).toBeTruthy();
     expect(screen.getByText(/Save ৳10/)).toBeTruthy();
-    expect(screen.getByText("Fresh · Seller: Meghna")).toBeTruthy();
+    expect(screen.getByText("Fresh")).toBeTruthy();
+    expect(screen.getByText("Seller: Meghna")).toBeTruthy();
     expect(screen.getByText("5 L")).toBeTruthy();
     expect(screen.getByText("In stock")).toBeTruthy();
     expect(screen.getByText("Out of stock")).toBeTruthy();
@@ -75,7 +79,7 @@ describe("SearchApp", () => {
   });
 
   it("replaces a broken image with the placeholder", async () => {
-    const data: SearchResponse = {
+    const data: ApiBody = {
       query: "oil", searchedAt: new Date().toISOString(),
       stores: [{ storeId: "a", storeName: "Store A", status: "ok", durationMs: 10, resultCount: 1 }],
       results: [{ storeId: "a", storeName: "Store A", title: "Oil 1L", url: "https://a.example/1", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", imageUrl: "https://img.a.example/blocked.jpeg", checkedAt: "" }],
@@ -101,23 +105,63 @@ describe("SearchApp", () => {
     render(<SearchApp />);
     search("oil");
     expect(await screen.findByText("Good Oil")).toBeTruthy();
-    expect(screen.getAllByRole("listitem")).toHaveLength(1);
+    expect(screen.getAllByTestId("product-group")).toHaveLength(1);
   });
 
   it("shows no-results and all-stores-failed states", async () => {
-    const empty: SearchResponse = { query: "xyz", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "empty", durationMs: 5, resultCount: 0 }] };
+    const empty: ApiBody = { query: "xyz", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "empty", durationMs: 5, resultCount: 0 }] };
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(empty)));
     render(<SearchApp />);
     search("xyz");
     expect(await screen.findByText("No products found for “xyz”.")).toBeTruthy();
     cleanup();
 
-    const failed: SearchResponse = { query: "oil", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "error", durationMs: 5, resultCount: 0, message: "Store returned an error (HTTP 500)." }] };
+    const failed: ApiBody = { query: "oil", searchedAt: new Date().toISOString(), results: [], stores: [{ storeId: "a", storeName: "Store A", status: "error", durationMs: 5, resultCount: 0, message: "Store returned an error (HTTP 500)." }] };
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(failed)));
     render(<SearchApp />);
     search("oil");
     expect(await screen.findByText("Stores could not be searched right now. Please try again.")).toBeTruthy();
     expect(screen.getByRole("note").textContent).toContain("Store A (Failed: Store returned an error (HTTP 500).)");
+  });
+
+  it("labels single-store results and never marks a lowest price", async () => {
+    const data: ApiBody = {
+      query: "oil", searchedAt: new Date().toISOString(),
+      stores: [{ storeId: "othoba", storeName: "Othoba", status: "ok", durationMs: 10, resultCount: 2 }],
+      results: [
+        { storeId: "othoba", storeName: "Othoba", title: "Oil 5L", url: "https://othoba.example/1", price: 990, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
+        { storeId: "othoba", storeName: "Othoba", title: "Oil 1L", url: "https://othoba.example/2", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
+      ],
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(data)));
+    render(<SearchApp />);
+    search("oil");
+    expect(await screen.findByText("Results from Othoba only, so prices are not compared across stores.")).toBeTruthy();
+    expect(screen.getAllByTestId("product-group")).toHaveLength(2);
+    expect(screen.queryByText("Lowest price")).toBeNull();
+  });
+
+  it("shows a confirmed multi-store group side by side with the lowest in-stock price marked", async () => {
+    const a = { storeId: "s1", storeName: "Store One", title: "Lux Soap 100g", url: "https://one.example/lux", price: 60, regularPrice: null, currency: "BDT" as const, availability: "in_stock" as const, checkedAt: "" };
+    const b = { ...a, storeId: "s2", storeName: "Store Two", url: "https://two.example/lux", price: 55 };
+    const c = { ...a, storeId: "s3", storeName: "Store Three", url: "https://three.example/lux", price: 50, availability: "out_of_stock" as const };
+    const body = {
+      query: "lux", searchedAt: new Date().toISOString(),
+      stores: [a, b, c].map((o) => ({ storeId: o.storeId, storeName: o.storeName, status: "ok", durationMs: 5, resultCount: 1 })),
+      results: [a, b, c],
+      groups: [{ id: "g1", title: "Lux Soap 100g", offers: [a, b, c], storeCount: 3, matchBasis: "gtin" }],
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(body)));
+    render(<SearchApp />);
+    search("lux");
+    expect(await screen.findByText("Same product at 3 stores")).toBeTruthy();
+    expect(screen.getAllByTestId("product-group")).toHaveLength(1);
+    // Lowest among in-stock offers (৳55), not the cheaper out-of-stock one (৳50).
+    expect(screen.getByText("৳55").textContent).toContain("Lowest price");
+    expect(screen.getByText("৳50").textContent).not.toContain("Lowest price");
+    const links = (screen.getAllByRole("link", { name: "View product" }) as HTMLAnchorElement[]).map((l) => l.href);
+    expect(links).toEqual(["https://one.example/lux", "https://two.example/lux", "https://three.example/lux"]);
+    expect(screen.queryByText(/Results from .* only/)).toBeNull();
   });
 
   it("shows an error for an invalid API payload", async () => {

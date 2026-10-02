@@ -18,7 +18,7 @@ describe("POST /api/search", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("Cache-Control")).toBe("no-store");
     const body = await res.json();
-    expect(body).toMatchObject({ query: "iPhone 16 128GB", results: [], stores: [] });
+    expect(body).toMatchObject({ query: "iPhone 16 128GB", results: [], groups: [], stores: [] });
   });
 
   it("returns a structured 400 for invalid input", async () => {

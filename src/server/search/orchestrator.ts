@@ -1,6 +1,7 @@
 import "server-only";
 import type { Offer, SearchResponse, StoreStatus } from "@/lib/types";
 import type { SearchConfig } from "../config";
+import { groupOffers } from "../compare/group";
 import { normalizeCandidate } from "../normalize/product";
 import { StoreBlockedError, StoreError, type StoreAdapter } from "../stores/types";
 
@@ -82,9 +83,11 @@ export async function runSearch(
   const budgetSignal = AbortSignal.timeout(config.budgetMs);
   const outcomes = await Promise.all(adapters.map((a) => searchStore(a, query, config, budgetSignal)));
 
+  const results = outcomes.flatMap((o) => o.offers);
   return {
     query,
-    results: outcomes.flatMap((o) => o.offers),
+    results,
+    groups: groupOffers(results),
     stores: outcomes.map((o) => o.status),
     searchedAt: new Date().toISOString(),
   };

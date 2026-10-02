@@ -22,6 +22,7 @@ describe("runSearch", () => {
   it("returns an empty response when no stores are configured", async () => {
     const res = await runSearch("phone", [], config);
     expect(res.results).toEqual([]);
+    expect(res.groups).toEqual([]);
     expect(res.stores).toEqual([]);
     expect(res.query).toBe("phone");
   });
@@ -53,6 +54,8 @@ describe("runSearch", () => {
       slow: "timeout",
     });
     expect(res.results).toHaveLength(1);
+    expect(res.groups).toHaveLength(1);
+    expect(res.groups[0]?.offers[0]?.url).toBe("https://a.example/p/1");
     expect(res.results[0]).toMatchObject({ storeId: "ok", storeName: "OK", currency: "BDT", price: 1000 });
     expect(res.stores.find((s) => s.storeId === "broken")?.message).not.toContain("parse failure");
   });

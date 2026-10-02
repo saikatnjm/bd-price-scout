@@ -69,9 +69,38 @@ export interface StoreStatus {
   message?: string;
 }
 
+export type MatchBasis = "same_listing" | "gtin" | "model" | "attributes";
+
+/**
+ * Offers the matching engine confirmed to be the same product and variant. A group with
+ * one offer is a product found at a single store. Each offer keeps its own store price,
+ * availability, package details and link; nothing is merged or estimated.
+ */
+export interface ComparisonGroup {
+  id: string;
+  /** Display identity, taken from the first offer. */
+  title: string;
+  brand?: string;
+  imageUrl?: string;
+  pack?: PackageInfo;
+  variant?: VariantInfo;
+  /** Weakest evidence that joined the group; absent for single-offer groups. */
+  matchBasis?: MatchBasis;
+  offers: Offer[];
+  /** Number of distinct stores in the group. */
+  storeCount: number;
+  /**
+   * Lowest current price among in-stock offers, only when at least two different stores
+   * have an in-stock price for this confirmed product. Absent otherwise.
+   */
+  lowestPrice?: number;
+}
+
 export interface SearchResponse {
   query: string;
   results: Offer[];
+  /** Results grouped by confirmed product identity, in the order products were found. */
+  groups: ComparisonGroup[];
   stores: StoreStatus[];
   searchedAt: string;
 }

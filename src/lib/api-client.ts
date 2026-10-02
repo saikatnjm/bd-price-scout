@@ -1,4 +1,5 @@
-import type { ApiErrorBody, Availability, Offer, SearchResponse, StoreStatus } from "./types";
+import { buildGroup } from "./groups";
+import type { ApiErrorBody, Availability, ComparisonGroup, MatchBasis, Offer, SearchResponse, StoreStatus } from "./types";
 
 export class SearchRequestError extends Error {}
 
@@ -39,14 +40,32 @@ function isStoreStatus(value: unknown): value is StoreStatus {
   return isRecord(value) && typeof value.storeId === "string" && typeof value.storeName === "string" && typeof value.status === "string";
 }
 
+const MATCH_BASES: readonly MatchBasis[] = ["same_listing", "gtin", "model", "attributes"];
+
+/** Rebuilds groups from validated offers; a group whose offers are all malformed is dropped. */
+function toGroups(raw: unknown, results: Offer[]): ComparisonGroup[] {
+  if (!Array.isArray(raw)) return results.map((offer) => buildGroup([offer])); // older API: one group per offer
+  const groups: ComparisonGroup[] = [];
+  for (const g of raw) {
+    if (!isRecord(g) || !Array.isArray(g.offers)) continue;
+    const offers = g.offers.filter(isOffer);
+    if (offers.length === 0) continue;
+    const basis = MATCH_BASES.includes(g.matchBasis as MatchBasis) ? (g.matchBasis as MatchBasis) : undefined;
+    groups.push(buildGroup(offers, basis));
+  }
+  return groups;
+}
+
 /** Validates the API payload; drops malformed results rather than failing the whole search. */
 export function toSearchResponse(body: unknown): SearchResponse {
   if (!isRecord(body) || !Array.isArray(body.results) || !Array.isArray(body.stores) || typeof body.query !== "string") {
     throw new SearchRequestError("The server returned an invalid response.");
   }
+  const results = body.results.filter(isOffer);
   return {
     query: body.query,
-    results: body.results.filter(isOffer),
+    results,
+    groups: toGroups(body.groups, results),
     stores: body.stores.filter(isStoreStatus),
     searchedAt: typeof body.searchedAt === "string" ? body.searchedAt : new Date().toISOString(),
   };
