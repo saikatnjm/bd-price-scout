@@ -2,25 +2,21 @@
 name: Research probe
 on: push
 permissions:
-  contents: write
+  contents: read
 jobs:
-  fixtures:
+  live:
     if: "!contains(github.event.head_commit.message, '[skip probe]')"
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      LIVE_STORE_TESTS: "1"
     steps:
       - uses: actions/checkout@v5
-      - name: Capture Othoba fixtures (4 pages, 3s apart)
-        shell: bash {0}
-        run: |
-          ua="BDPriceScout/0.1 (+https://github.com/saikatnjm/bd-price-scout)"
-          mkdir -p fixtures/othoba
-          get() { curl -sS -A "$ua" -H 'Accept: text/html' -o "fixtures/othoba/$1.html" -w "$1 %{http_code} %{size_download}B\n" "$2"; gzip -9f "fixtures/othoba/$1.html"; sleep 3; }
-          get category-oil https://othoba.com/oil
-          get product-discounted https://othoba.com/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817
-          get product-multipack https://othoba.com/mr-noodles-12-pcs-family-pack-masala-62gm-x-12pcs-33408
-          get product-bundle https://othoba.com/fresh-rice-bran-oil-5ltr-4-pcs-bundle
-          ls -la fixtures/othoba
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add fixtures && git commit -m "fixtures: othoba [skip probe]" && git push
+        with:
+          ref: dev
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: .github/scripts/run.sh npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose
