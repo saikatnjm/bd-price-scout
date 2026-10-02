@@ -9,7 +9,7 @@ if [ "$status" -ne 0 ]; then
   tail -n 60 "$log" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN{ORS="%0A"} {print}' > "$log.msg"
   echo "::error title=Failed: $*::$(cat "$log.msg")"
 else
-  tail -n 15 "$log" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN{ORS="%0A"} {print}' > "$log.msg"
+  { grep -iE -B2 'warn' "$log" | head -n 20; echo "---"; tail -n 15 "$log"; } | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN{ORS="%0A"} {print}' > "$log.msg"
   echo "::notice title=Passed: $*::$(cat "$log.msg")"
 fi
 exit "$status"
