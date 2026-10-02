@@ -38,5 +38,26 @@ jobs:
       - uses: actions/checkout@v5
       - name: Build local dev image
         run: .github/scripts/run.sh docker compose build
-      - name: Run tests inside the dev container
-        run: .github/scripts/run.sh docker compose run --rm app npm test
+      # The container runs as uid 1000 (node); the runner's checkout belongs to another uid.
+      - name: Let the container user write to the bind-mounted checkout
+        run: sudo chown -R 1000:1000 .
+      - name: Lint, typecheck, test and production build inside the dev container
+        run: .github/scripts/run.sh docker compose run --rm app npm run check
+      - name: Start the app container
+        run: docker compose up -d
+      - name: Wait for the app to respond
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:3000/ && exit 0
+            sleep 2
+          done
+          docker compose logs app | tail -n 50
+          exit 1
+      - name: Smoke test the running container
+        run: .github/scripts/run.sh .github/scripts/smoke.sh http://localhost:3000
+      - name: Container logs
+        if: always()
+        run: .github/scripts/run.sh bash -c 'docker compose logs app | tail -n 40; ! docker compose logs app | grep -iE "error|unhandled"'
+      - name: Stop the app container
+        if: always()
+        run: docker compose down -v

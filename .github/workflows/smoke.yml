@@ -1,0 +1,20 @@
+# Manually triggered HTTP smoke test against a deployed URL (e.g. the Vercel production URL).
+name: Deployment smoke test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Base URL to test, e.g. https://bd-price-scout.vercel.app
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - run: .github/scripts/run.sh .github/scripts/smoke.sh "${{ inputs.url }}" "${{ github.sha }}"
