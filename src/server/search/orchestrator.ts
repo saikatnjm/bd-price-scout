@@ -52,7 +52,9 @@ async function searchStore(
       },
     };
   } catch (err) {
-    const timedOut = err instanceof StoreTimeoutError || signal.aborted;
+    // A store request that hit its own deadline surfaces as a DOMException "TimeoutError".
+    const timedOut =
+      err instanceof StoreTimeoutError || signal.aborted || (err instanceof Error && err.name === "TimeoutError");
     const blocked = err instanceof StoreBlockedError;
     if (!timedOut && !blocked) console.error(`Store "${adapter.id}" search failed`, err);
     return {

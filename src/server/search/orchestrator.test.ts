@@ -60,18 +60,38 @@ describe("runSearch", () => {
     expect(res.stores.find((s) => s.storeId === "broken")?.message).not.toContain("parse failure");
   });
 
+  it("reports a store request's own timeout as a timeout, not a generic error", async () => {
+    const res = await runSearch(
+      "phone",
+      [
+        adapter("ok", async () => [candidate]),
+        adapter("slowpage", async () => {
+          throw new DOMException("The operation was aborted due to timeout", "TimeoutError");
+        }),
+      ],
+      { storeTimeoutMs: 1000, budgetMs: 2000 },
+    );
+    expect(res.stores.find((s) => s.storeId === "slowpage")).toMatchObject({
+      status: "timeout",
+      message: "Store took too long to respond.",
+    });
+    expect(res.results).toHaveLength(1);
+  });
+
   it("passes an abort signal that fires on timeout", async () => {
     let aborted = false;
     await runSearch(
       "phone",
       [
-        adapter("slow", (_query, { signal }) =>
-          new Promise((resolve) => {
-            signal.addEventListener("abort", () => {
-              aborted = true;
-              resolve([]);
-            });
-          }),
+        adapter(
+          "slow",
+          (_query, { signal }) =>
+            new Promise((resolve) => {
+              signal.addEventListener("abort", () => {
+                aborted = true;
+                resolve([]);
+              });
+            }),
         ),
       ],
       config,

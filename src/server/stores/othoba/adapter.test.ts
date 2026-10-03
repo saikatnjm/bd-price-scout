@@ -1,30 +1,40 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { loadFixture } from "../../../../tests/fixtures";
 import { StoreBlockedError, StoreError } from "../types";
-import { othobaAdapter } from "./adapter";
+import { createOthobaAdapter, othobaAdapter } from "./adapter";
 
 const htmlResponse = (body: string, status = 200) =>
   new Response(body, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 
-const pages: Record<string, () => Response> = {
+type Route = (init?: RequestInit) => Response | Promise<Response>;
+
+/** A request that never answers until it is aborted (simulates a stalled store page). */
+const stall: Route = (init) =>
+  new Promise<Response>((_, reject) => {
+    init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), { once: true });
+  });
+
+const pages: Record<string, Route> = {
   "/oil": () => htmlResponse(loadFixture("othoba/category-oil")),
   "/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817": () =>
     htmlResponse(loadFixture("othoba/product-discounted")),
   "/fresh-rice-bran-oil-5ltr-4-pcs-bundle": () => htmlResponse(loadFixture("othoba/product-bundle")),
 };
 
-function mockStore(overrides: Record<string, () => Response> = {}) {
-  const fetchMock = vi.fn(async (input: URL) => {
-    const route = { ...pages, ...overrides }[input.pathname + input.search] ?? { ...pages, ...overrides }[input.pathname];
+function mockStore(overrides: Record<string, Route> = {}) {
+  const fetchMock = vi.fn(async (input: URL, init?: RequestInit) => {
+    const route =
+      { ...pages, ...overrides }[input.pathname + input.search] ?? { ...pages, ...overrides }[input.pathname];
     // Pages without a fixture answer 404, exercising partial-failure handling.
-    return route ? route() : htmlResponse("not found", 404);
+    return route ? route(init) : htmlResponse("not found", 404);
   });
   vi.stubGlobal("fetch", fetchMock);
   return fetchMock;
 }
 
 const ctx = () => ({ signal: new AbortController().signal });
-const requested = (m: ReturnType<typeof mockStore>) => m.mock.calls.map(([u]) => (u as URL).pathname + (u as URL).search);
+const requested = (m: ReturnType<typeof mockStore>) =>
+  m.mock.calls.map(([u]) => (u as URL).pathname + (u as URL).search);
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -80,16 +90,57 @@ describe("othobaAdapter.search", () => {
 
     const aborted = new AbortController();
     aborted.abort();
-    vi.stubGlobal("fetch", vi.fn(async (_u: URL, init: RequestInit) => {
-      init.signal?.throwIfAborted();
-      return htmlResponse("");
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_u: URL, init: RequestInit) => {
+        init.signal?.throwIfAborted();
+        return htmlResponse("");
+      }),
+    );
     await expect(othobaAdapter.search("soybean oil", { signal: aborted.signal })).rejects.toThrow();
+  });
+
+  it("returns the other products when one product page stalls (per-request timeout)", async () => {
+    mockStore({ "/fresh-fortified-soyebean-oil-5ltr-2": stall });
+    const adapter = createOthobaAdapter({ requestTimeoutMs: 100 });
+    const started = Date.now();
+    const results = await adapter.search("fresh soybean oil 5 ltr", ctx());
+    expect(results.map((r) => r.storeProductId)).toEqual(["709817"]);
+    expect(Date.now() - started).toBeLessThan(2000);
+  });
+
+  it("fails with a timeout when every product page stalls", async () => {
+    mockStore({
+      "/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817": stall,
+      "/fresh-fortified-soyebean-oil-5ltr-2": stall,
+      "/fresh-fortified-soyebean-oil-5ltr-4-pcs-bundle": stall,
+    });
+    await expect(
+      createOthobaAdapter({ requestTimeoutMs: 100 }).search("fresh soybean oil 5 ltr", ctx()),
+    ).rejects.toMatchObject({
+      name: "TimeoutError",
+    });
+  });
+
+  it("fails with a timeout when the category page stalls", async () => {
+    mockStore({ "/oil": stall });
+    await expect(createOthobaAdapter({ requestTimeoutMs: 100 }).search("soybean oil", ctx())).rejects.toMatchObject({
+      name: "TimeoutError",
+    });
+  });
+
+  it("never requests more than 2 category pages and 5 product pages", async () => {
+    const fetchMock = mockStore({ "/oil?pagenumber=2": () => htmlResponse(loadFixture("othoba/category-oil")) });
+    await othobaAdapter.search("oil", ctx());
+    const paths = requested(fetchMock);
+    expect(paths.filter((p) => p.startsWith("/oil")).length).toBeLessThanOrEqual(2);
+    expect(paths.filter((p) => !p.startsWith("/oil")).length).toBeLessThanOrEqual(5);
   });
 
   it("reports a parse error when product pages load but contain no product data", async () => {
     mockStore({
-      "/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817": () => htmlResponse("<html>changed</html>"),
+      "/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817": () =>
+        htmlResponse("<html>changed</html>"),
       "/fresh-rice-bran-oil-5ltr-4-pcs-bundle": () => htmlResponse("<html>changed</html>"),
     });
     await expect(othobaAdapter.search("fresh oil 5 ltr bundle", ctx())).rejects.toMatchObject({ kind: "parse" });

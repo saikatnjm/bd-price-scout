@@ -21,6 +21,7 @@ function assertAllowed(url: URL, allowedHosts: readonly string[]): void {
 async function readCapped(response: Response, maxBytes: number): Promise<string> {
   const declared = Number(response.headers.get("content-length"));
   if (Number.isFinite(declared) && declared > maxBytes) {
+    await discard(response);
     throw new StoreError("invalid_response", "Store page was unexpectedly large.");
   }
   if (!response.body) return "";
@@ -38,6 +39,15 @@ async function readCapped(response: Response, maxBytes: number): Promise<string>
     chunks.push(value);
   }
   return new TextDecoder().decode(Buffer.concat(chunks));
+}
+
+/** Releases a response body we are not going to read, so the connection is freed. */
+async function discard(response: Response): Promise<void> {
+  try {
+    await response.body?.cancel();
+  } catch {
+    // Already consumed or aborted: nothing to release.
+  }
 }
 
 /**
@@ -58,6 +68,7 @@ export async function fetchHtml(rawUrl: string, options: FetchHtmlOptions): Prom
     });
 
     if (response.status >= 300 && response.status < 400) {
+      await discard(response);
       const location = response.headers.get("location");
       if (!location || redirects >= MAX_REDIRECTS) {
         throw new StoreError("invalid_response", "Store redirected unexpectedly.");
@@ -68,13 +79,16 @@ export async function fetchHtml(rawUrl: string, options: FetchHtmlOptions): Prom
 
     // Cloudflare marks challenge responses; never try to solve them.
     if (response.headers.get("cf-mitigated") === "challenge" || response.status === 403 || response.status === 429) {
+      await discard(response);
       throw new StoreBlockedError(`Store refused the request (HTTP ${response.status}).`);
     }
     if (!response.ok) {
+      await discard(response);
       throw new StoreError("http", `Store returned an error (HTTP ${response.status}).`);
     }
     const contentType = response.headers.get("content-type") ?? "";
     if (!contentType.includes("text/html")) {
+      await discard(response);
       throw new StoreError("invalid_response", "Store returned an unexpected response.");
     }
     return readCapped(response, maxBytes);
