@@ -44,10 +44,17 @@ jobs:
       - run: .github/scripts/run.sh docker compose exec -T app npm run build
       - name: Dev server still serves after the production build
         run: curl -sf -o /dev/null -w '%{http_code}\n' http://localhost:3000/
+      - name: No server-only code or config names in browser bundles
+        run: |
+          ! docker compose exec -T app grep -rlE "STORE_TIMEOUT_MS|SEARCH_BUDGET_MS|cheerio|BDPriceScout/" .next/static
+      - name: Start the production server in the container (port 3001, not published)
+        run: |
+          docker compose exec -d -T app npx next start -p 3001
+          for i in $(seq 1 30); do docker compose exec -T app wget -qO /dev/null http://localhost:3001/ && break; sleep 2; done
       - name: Playwright end-to-end (real Othoba)
         run: |
-          docker run --rm --network host -v "$PWD/.github/qa:/qa:ro" -v "$PWD/qa-out:/out" \
-            -e OUT_DIR=/out mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble \
+          docker run --rm --network "container:$(docker compose ps -q app)" -v "$PWD/.github/qa:/qa:ro" -v "$PWD/qa-out:/out" \
+            -e OUT_DIR=/out -e PROD_URL=http://localhost:3001 mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble \
             bash -c "mkdir /work && cp /qa/e2e.mjs /work && cd /work && npm init -y >/dev/null && npm i --silent playwright@${PLAYWRIGHT_VERSION} && node e2e.mjs" \
             2>&1 | tee qa-out/e2e.txt; exit ${PIPESTATUS[0]}
       - name: Collect logs and resource use

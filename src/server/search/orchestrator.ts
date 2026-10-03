@@ -56,7 +56,10 @@ async function searchStore(
     const timedOut =
       err instanceof StoreTimeoutError || signal.aborted || (err instanceof Error && err.name === "TimeoutError");
     const blocked = err instanceof StoreBlockedError;
+    // Logged without the query. Timeouts and refusals are expected occasionally, but a store
+    // that keeps refusing needs attention, so they are visible in the server logs too.
     if (!timedOut && !blocked) console.error(`Store "${adapter.id}" search failed`, err);
+    else console.warn(`Store "${adapter.id}" ${timedOut ? "timed out" : "refused the request"}`);
     return {
       offers: [],
       status: {

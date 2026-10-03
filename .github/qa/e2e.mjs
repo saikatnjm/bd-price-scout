@@ -242,6 +242,33 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   await page.close();
 }
 
+// 6. Production server (next start) when PROD_URL is given: CSP present, the UI works under
+// it (no CSP violations or other console errors), and images only come from Othoba hosts.
+if (process.env.PROD_URL) {
+  const PROD = process.env.PROD_URL;
+  const page = await browser.newPage({ viewport: VIEWPORTS.desktop });
+  const consoleErrors = [];
+  const imageHosts = new Set();
+  page.on("console", (m) => m.type() === "error" && consoleErrors.push(m.text()));
+  page.on("pageerror", (e) => consoleErrors.push(`pageerror: ${e.message}`));
+  page.on("request", (r) => r.resourceType() === "image" && imageHosts.add(new URL(r.url()).hostname));
+  const res = await page.goto(PROD, { waitUntil: "networkidle" });
+  const headers = res.headers();
+  await page.fill("#search-query", "rice");
+  await page.keyboard.press("Enter");
+  await page.locator('main [data-testid="product-group"]').or(page.locator('main [role="alert"]')).first().waitFor({ timeout: 30000 });
+  await page.waitForLoadState("networkidle");
+  const groups = await page.locator('main [data-testid="product-group"]').count();
+  const loadedImages = await page.$$eval("main img", (imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length);
+  await page.screenshot({ path: `${OUT}/prod-results.png`, fullPage: true });
+  report.production = { csp: headers["content-security-policy"], xfo: headers["x-frame-options"], groups, loadedImages, consoleErrors, imageHosts: [...imageHosts] };
+  if (!headers["content-security-policy"]) fail("production: no CSP header");
+  if (groups === 0) fail("production: no results rendered");
+  for (const h of imageHosts) if (!ALLOWED_IMAGE_HOSTS.has(h) && h !== new URL(PROD).hostname) fail(`production: image from ${h}`);
+  for (const e of consoleErrors) if (!/status of 403/.test(e)) fail(`production: console error ${e}`);
+  await page.close();
+}
+
 await browser.close();
 report.finishedAt = new Date().toISOString();
 writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 2));

@@ -59,8 +59,7 @@ function OfferRow({ offer, lowestPrice }: { offer: Offer; lowestPrice?: number }
             rel="noopener noreferrer nofollow"
             className="mt-1 inline-block text-xs font-medium text-emerald-700 underline dark:text-emerald-400"
           >
-            View on {offer.storeName}
-            <span className="sr-only"> (opens in a new tab)</span>
+            View on {offer.storeName} <span className="sr-only">(opens in a new tab)</span>
           </a>
         )}
       </div>
