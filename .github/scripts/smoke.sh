@@ -25,6 +25,17 @@ grep -q '"query":"Samsung Galaxy S25 Ultra 256GB"' "$tmp/ok.json" || fail "unexp
 grep -q '"results":\[' "$tmp/ok.json" || fail "search body has no results array"
 echo "OK  POST /api/search valid -> 200 $(head -c 200 "$tmp/ok.json")"
 
+# Real store search (deployments only; CI's container smoke test never contacts stores).
+if [ "${SMOKE_LIVE_SEARCH:-}" = 1 ]; then
+  code=$(curl -sS -o "$tmp/live.json" -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
+    --data '{"query":"soybean oil 5 ltr"}' "$base/api/search")
+  [ "$code" = 200 ] && grep -q '"status":"ok"' "$tmp/live.json" && grep -q '"url":"https://othoba.com/' "$tmp/live.json" \
+    || fail "live search -> $code $(head -c 400 "$tmp/live.json")"
+  echo "OK  live Othoba search -> $(grep -o '"durationMs":[0-9]*' "$tmp/live.json" | head -1), $(grep -o '"resultCount":[0-9]*' "$tmp/live.json" | head -1)"
+  grep -qi '^content-security-policy:' "$tmp/home.h" || fail "missing Content-Security-Policy header (production build)"
+  echo "OK  Content-Security-Policy present"
+fi
+
 # Search API: invalid JSON and invalid query are rejected with structured errors.
 code=$(curl -sS -o "$tmp/bad.json" -w '%{http_code}' -X POST -H 'Content-Type: application/json' --data '{bad' "$base/api/search")
 [ "$code" = 400 ] && grep -q '"INVALID_REQUEST"' "$tmp/bad.json" || fail "invalid JSON -> $code $(cat "$tmp/bad.json")"
