@@ -1,0 +1,64 @@
+# Manual end-to-end QA of the Docker dev environment: clean rebuild, checks run inside the
+# app container, then real Othoba searches through the UI and API with Playwright (in its own
+# container). Results (report.json, screenshots, logs) are pushed to the `qa-results` branch.
+name: Docker E2E QA
+
+on:
+  workflow_dispatch:
+    inputs:
+      no_cache:
+        description: Rebuild the image without cache
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PLAYWRIGHT_VERSION: "1.56.0"
+    steps:
+      - uses: actions/checkout@v5
+      - run: mkdir -p qa-out
+      - name: Clean build
+        run: |
+          docker compose down -v
+          .github/scripts/run.sh docker compose build ${{ inputs.no_cache && '--no-cache' || '' }}
+      # The container runs as uid 1000 (node); the runner's checkout belongs to another uid.
+      - run: sudo chown -R 1000:1000 . && sudo chmod -R a+rwX qa-out
+      - name: Start
+        run: |
+          docker compose up -d
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:3000/ && break; sleep 2; done
+          docker compose ps | tee qa-out/ps.txt
+      - run: .github/scripts/run.sh docker compose exec -T app npm test
+      - run: .github/scripts/run.sh docker compose exec -T app npm run lint
+      - run: .github/scripts/run.sh docker compose exec -T app npm run typecheck
+      - run: .github/scripts/run.sh docker compose exec -T app npm run build
+      - name: Dev server still serves after the production build
+        run: curl -sf -o /dev/null -w '%{http_code}\n' http://localhost:3000/
+      - name: Playwright end-to-end (real Othoba)
+        run: |
+          docker run --rm --network host -v "$PWD/.github/qa:/qa:ro" -v "$PWD/qa-out:/out" \
+            -e OUT_DIR=/out mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble \
+            bash -c "mkdir /work && cp /qa/e2e.mjs /work && cd /work && npm init -y >/dev/null && npm i --silent playwright@${PLAYWRIGHT_VERSION} && node e2e.mjs" \
+            2>&1 | tee qa-out/e2e.txt; exit ${PIPESTATUS[0]}
+      - name: Collect logs and resource use
+        if: always()
+        run: |
+          docker stats --no-stream app 2>/dev/null > qa-out/stats.txt || docker stats --no-stream > qa-out/stats.txt
+          docker compose logs app > qa-out/app.log 2>&1
+          ! grep -iE "unhandled|uncaught|⨯" qa-out/app.log
+      - name: Publish results to the qa-results branch
+        if: always()
+        run: |
+          cd qa-out
+          git init -q -b qa-results
+          git -c user.name=qa-bot -c user.email=qa-bot@users.noreply.github.com add -A
+          git -c user.name=qa-bot -c user.email=qa-bot@users.noreply.github.com commit -qm "QA ${GITHUB_SHA} run ${GITHUB_RUN_ID}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" qa-results
+      - if: always()
+        run: docker compose down -v
