@@ -41,12 +41,16 @@ describe("readRequestBody", () => {
 
   it("rejects a declared oversized body without reading it", async () => {
     let pulled = false;
-    const stream = new ReadableStream({
-      pull(c) {
-        pulled = true;
-        c.enqueue(new Uint8Array(10));
+    // highWaterMark 0: the stream is only pulled when someone actually reads it.
+    const stream = new ReadableStream(
+      {
+        pull(c) {
+          pulled = true;
+          c.enqueue(new Uint8Array(10));
+        },
       },
-    });
+      { highWaterMark: 0 },
+    );
     await expect(readRequestBody(post(stream, { "content-length": "999999" }))).rejects.toMatchObject({
       code: "PAYLOAD_TOO_LARGE",
     });
