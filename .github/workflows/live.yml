@@ -25,5 +25,5 @@ jobs:
         shell: bash {0}
         run: |
           npx vitest run src/server/stores/othoba/othoba.live.test.ts --reporter=verbose > out.txt 2>&1; code=$?
-          echo "::notice title=live::$(grep -E '^LIVE|Tests |FAIL|Error' out.txt | cut -c1-600 | awk 'BEGIN{ORS="%0A"} {print}')"
+          echo "::notice title=live::$(sed 's/\x1b\[[0-9;]*m//g' out.txt | grep -E 'LIVE|Tests |FAIL|Error' | cut -c1-600 | awk 'BEGIN{ORS="%0A"} {print}')"
           tail -n 20 out.txt; exit $code
