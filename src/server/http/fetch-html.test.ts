@@ -23,6 +23,7 @@ describe("fetchHtml", () => {
     await expect(fetchHtml("https://evil.example/", opts())).rejects.toBeInstanceOf(StoreError);
     await expect(fetchHtml("http://store.example/", opts())).rejects.toBeInstanceOf(StoreError);
     await expect(fetchHtml("https://u:p@store.example/", opts())).rejects.toBeInstanceOf(StoreError);
+    await expect(fetchHtml("https://store.example:8443/", opts())).rejects.toBeInstanceOf(StoreError);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

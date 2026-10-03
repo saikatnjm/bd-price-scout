@@ -13,7 +13,7 @@ export interface FetchHtmlOptions {
 }
 
 function assertAllowed(url: URL, allowedHosts: readonly string[]): void {
-  if (url.protocol !== "https:" || !allowedHosts.includes(url.hostname) || url.username || url.password) {
+  if (url.protocol !== "https:" || !allowedHosts.includes(url.hostname) || url.port !== "" || url.username || url.password) {
     throw new StoreError("invalid_response", "Store link pointed outside the store.");
   }
 }

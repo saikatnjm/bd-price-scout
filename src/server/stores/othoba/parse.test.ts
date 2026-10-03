@@ -84,6 +84,7 @@ describe("parseProductPage (edge cases)", () => {
     expect(img(["https://images.othoba.com/images/thumbs/3_c.webp"])).toBe("https://images.othoba.com/images/thumbs/3_c.webp");
     expect(img("https://cdn.evil.example/x.jpg")).toBeUndefined();
     expect(img("http://images.othoba.com/x.jpg")).toBeUndefined();
+    expect(img("https://images.othoba.com:8443/x.jpg")).toBeUndefined();
   });
 
   it("drops a brand that is really the seller's name, but keeps a brand sold by its own store", () => {
@@ -105,6 +106,9 @@ describe("parseProductPage (edge cases)", () => {
       "https://othoba.com/fallback",
     );
     expect(p).toMatchObject({ url: "https://othoba.com/fallback" });
+    expect(
+      parseProductPage(productHtml({ ...base, url: "https://othoba.com:8443/p" }), "https://othoba.com/fallback")?.url,
+    ).toBe("https://othoba.com/fallback");
     expect(p?.brand).toBeUndefined();
     expect(p?.sku).toBeUndefined();
     expect(p?.imageUrl).toBeUndefined();

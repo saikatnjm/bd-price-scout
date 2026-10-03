@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { StoreCandidate } from "../stores/types";
-import { normalizeCandidate } from "./product";
+import { MAX_TITLE_LENGTH, normalizeCandidate } from "./product";
 
 const store = { storeId: "othoba", storeName: "Othoba" };
 const at = "2026-10-02T00:00:00.000Z";
@@ -71,6 +71,13 @@ describe("normalizeCandidate", () => {
   it("returns null for candidates that cannot be shown", () => {
     expect(normalizeCandidate(candidate({ title: "   " }), store, at)).toBeNull();
     expect(normalizeCandidate(candidate({ url: "javascript:alert(1)" }), store, at)).toBeNull();
+  });
+
+  it("rejects oversized titles quickly instead of parsing them (regex cost guard)", () => {
+    expect(normalizeCandidate(candidate({ title: `Soap ${"x".repeat(MAX_TITLE_LENGTH)}` }), store, at)).toBeNull();
+    const started = performance.now();
+    expect(normalizeCandidate(candidate({ title: "buy 1 ".repeat(20_000) }), store, at)).toBeNull();
+    expect(performance.now() - started).toBeLessThan(50);
   });
 
   it("preserves meaningful differences between similar products", () => {

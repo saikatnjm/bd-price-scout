@@ -5,7 +5,8 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      # Loopback only: the dev server is not exposed to the local network.
+      - "127.0.0.1:3000:3000"
     environment:
       NEXT_TELEMETRY_DISABLED: "1"
     env_file:

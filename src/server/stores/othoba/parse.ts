@@ -45,7 +45,9 @@ function othobaUrl(value: unknown): string | undefined {
   if (typeof value !== "string" || value.trim() === "") return undefined;
   try {
     const url = new URL(value.trim(), OTHOBA_ORIGIN);
-    if (url.protocol !== "https:" || !(OTHOBA_HOSTS as readonly string[]).includes(url.hostname)) return undefined;
+    if (url.protocol !== "https:" || url.port !== "" || !(OTHOBA_HOSTS as readonly string[]).includes(url.hostname)) {
+      return undefined;
+    }
     return url.toString();
   } catch {
     return undefined;
@@ -60,7 +62,9 @@ function imageUrl(value: unknown): string | undefined {
   if (typeof value !== "string" || value.trim() === "") return undefined;
   try {
     const url = new URL(value.trim(), OTHOBA_ORIGIN);
-    return url.protocol === "https:" && OTHOBA_IMAGE_HOSTS.includes(url.hostname) ? url.toString() : undefined;
+    return url.protocol === "https:" && url.port === "" && OTHOBA_IMAGE_HOSTS.includes(url.hostname)
+      ? url.toString()
+      : undefined;
   } catch {
     return undefined;
   }

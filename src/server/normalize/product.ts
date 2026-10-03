@@ -15,10 +15,16 @@ export interface StoreRef {
  * candidate lacks the minimum needed to show it (name and a valid product URL).
  * Store identifiers are kept as published and stay tied to their store.
  */
+/**
+ * Real product names are far shorter. Longer titles are rejected (not truncated, which could
+ * drop meaningful attributes) so hostile store HTML cannot make the regex parsers run long.
+ */
+export const MAX_TITLE_LENGTH = 300;
+
 export function normalizeCandidate(candidate: StoreCandidate, store: StoreRef, checkedAt: string): Offer | null {
   const title = cleanText(candidate.title);
   const url = normalizeUrl(candidate.url);
-  if (!title || !url) return null;
+  if (!title || title.length > MAX_TITLE_LENGTH || !url) return null;
 
   const { price, regularPrice, discount } = normalizePrice(candidate.price, candidate.regularPrice);
   const offer: Offer = {

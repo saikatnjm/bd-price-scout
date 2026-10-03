@@ -17,4 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
-      - run: .github/scripts/run.sh .github/scripts/smoke.sh "${{ inputs.url }}" "${{ github.sha }}"
+      # Pass the input via env: interpolating it into the script would allow shell injection.
+      - env:
+          BASE_URL: ${{ inputs.url }}
+        run: .github/scripts/run.sh .github/scripts/smoke.sh "$BASE_URL" "$GITHUB_SHA"

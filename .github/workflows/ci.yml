@@ -26,6 +26,9 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: .github/scripts/run.sh npm ci
+      # Fail on high/critical advisories in runtime dependencies; dev-only advisories are reported.
+      - run: .github/scripts/run.sh npm audit --omit=dev --audit-level=high
+      - run: .github/scripts/run.sh bash -c 'npm audit || true'
       - run: .github/scripts/run.sh npm run lint
       - run: .github/scripts/run.sh npm run typecheck
       - run: .github/scripts/run.sh npm test
