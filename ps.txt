@@ -1,0 +1,2 @@
+NAME                   IMAGE                COMMAND                  SERVICE   CREATED         STATUS         PORTS
+bd-price-scout-app-1   bd-price-scout-app   "docker-entrypoint.s…"   app       9 seconds ago   Up 4 seconds   127.0.0.1:3000->3000/tcp

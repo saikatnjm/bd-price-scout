@@ -1,0 +1,21 @@
+Unable to find image 'mcr.microsoft.com/playwright:v1.56.0-noble' locally
+v1.56.0-noble: Pulling from playwright
+02bf5e209e4a: Pulling fs layer
+0583dec8dd1d: Pulling fs layer
+87cc6596c9a9: Pulling fs layer
+cfd5daa1002d: Pulling fs layer
+cfd5daa1002d: Waiting
+87cc6596c9a9: Download complete
+02bf5e209e4a: Verifying Checksum
+02bf5e209e4a: Download complete
+0583dec8dd1d: Verifying Checksum
+0583dec8dd1d: Download complete
+02bf5e209e4a: Pull complete
+cfd5daa1002d: Verifying Checksum
+cfd5daa1002d: Download complete
+0583dec8dd1d: Pull complete
+87cc6596c9a9: Pull complete
+cfd5daa1002d: Pull complete
+Digest: sha256:35246d87a7c88ea9b771c65d33171b2611b02a8253b4b12ce6f94376c55f99f2
+Status: Downloaded newer image for mcr.microsoft.com/playwright:v1.56.0-noble
+failures: 0

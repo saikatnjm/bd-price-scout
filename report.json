@@ -1,0 +1,1516 @@
+{
+  "base": "http://localhost:3000",
+  "startedAt": "2026-10-03T09:59:32.909Z",
+  "api": [
+    {
+      "query": "detergent",
+      "status": 200,
+      "ms": 3821,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 2671,
+          "resultCount": 3
+        }
+      ],
+      "results": 3,
+      "groups": 3,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Persil Detergent Powder 3kg",
+          "price": 2595,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 3,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 3000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0274069_persil-detergent-powder-3kg.jpeg",
+          "url": "https://othoba.com/persil-detergent-powder-3kg"
+        },
+        {
+          "title": "Fast Wash Detergent Powder 500gm",
+          "brand": "Kohinoor Chemical Co. Ltd",
+          "price": 150,
+          "regular": null,
+          "availability": "out_of_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 500,
+              "unit": "g"
+            },
+            "total": {
+              "value": 500,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0254060_fast-wash-detergent-powder-500gm.jpeg",
+          "url": "https://othoba.com/fast-wash-detergent-powder-500gm"
+        },
+        {
+          "title": "Fast Wash Detergent Powder 1000gm",
+          "brand": "Kohinoor Chemical Co. Ltd",
+          "price": 300,
+          "regular": null,
+          "availability": "out_of_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1000,
+              "unit": "g"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0254051_fast-wash-detergent-powder-1000gm.jpeg",
+          "url": "https://othoba.com/fast-wash-detergent-powder-1000gm"
+        }
+      ]
+    },
+    {
+      "query": "rice",
+      "status": 200,
+      "ms": 1655,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1640,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 4,
+      "multiOfferGroups": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "basis": "attributes",
+          "offers": [
+            "PRAN Aromatic Chinigura Premium Rice 1Kg",
+            "PRAN Aromatic Chinigura Premium Rice 1Kg"
+          ]
+        }
+      ],
+      "offers": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 216,
+          "regular": 230,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0318361_pran-aromatic-chinigura-premium-rice-1kg.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-bmr00006"
+        },
+        {
+          "title": "PRAN Chinigura Premium Rice 2kg",
+          "brand": "PRAN Rice",
+          "price": 428,
+          "regular": 450,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 2,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 2000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0319618_pran-chinigura-premium-rice-2kg.jpeg",
+          "url": "https://othoba.com/pran-chinigura-premium-rice-2kg"
+        },
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 210,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1112328_pran-aromatic-chinigura-premium-rice-1kg-copy.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-copy"
+        },
+        {
+          "title": "Pran minicate Zirashail rice 5kg",
+          "price": 440,
+          "regular": 470,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0588368_pran-minicate-rice-5kg.jpeg",
+          "url": "https://othoba.com/pran-minicate-rice-5kg-bmr00041"
+        },
+        {
+          "title": "PRAN Nazirsail Rice 5kg",
+          "brand": "PRAN Rice",
+          "price": 489,
+          "regular": 515,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0318637_pran-nazirsail-rice-5kg.jpeg",
+          "url": "https://othoba.com/pran-nazirsail-rice-5kg-48461"
+        }
+      ]
+    },
+    {
+      "query": "shampoo",
+      "status": 200,
+      "ms": 1876,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1864,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "PRAN Livana White Conditioning Shampoo 180ml",
+          "brand": "Livana",
+          "price": 130,
+          "regular": 180,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 180,
+              "unit": "ml"
+            },
+            "total": {
+              "value": 180,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0339707_pran-livana-white-conditioning-shampoo-180ml.jpeg",
+          "url": "https://othoba.com/pran-livana-white-conditioning-shampoo-180ml"
+        },
+        {
+          "title": "BIOAQUA Deep Cleansing Hair Growth Ginger Shampoo- 400g",
+          "price": 832,
+          "regular": 1935,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 400,
+              "unit": "g"
+            },
+            "total": {
+              "value": 400,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1015575_bioaqua-deep-cleansing-hair-growth-ginger-shampoo-400g.jpeg",
+          "url": "https://othoba.com/bioaqua-deep-cleansing-hair-growth-ginger-shampoo-400g-imran-fashion-hut-451741"
+        },
+        {
+          "title": "Buy 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml & Get 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml FREE - 340ml",
+          "brand": "Himalaya",
+          "price": 248,
+          "regular": 540,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": true
+          },
+          "image": "https://images.othoba.com/images/thumbs/2410023_buy-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-get-1-himalaya-gentle-daily-care-natu.jpeg",
+          "url": "https://othoba.com/buy-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-get-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-free-340ml-himalaya-wellness-bangladesh-969943"
+        },
+        {
+          "title": "Himalaya Gentle Daily Care Natural Protein Shampoo 170ml",
+          "brand": "Himalaya",
+          "price": 124,
+          "regular": 270,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 170,
+              "unit": "ml"
+            },
+            "total": {
+              "value": 170,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2410022_himalaya-gentle-daily-care-natural-protein-shampoo-170ml.jpeg",
+          "url": "https://othoba.com/himalaya-gentle-daily-care-natural-protein-shampoo-170ml-himalaya-wellness-bangladesh-969942"
+        },
+        {
+          "title": "OGX Argan Oil of Morocco Shampoo-385ml- - Multicolor",
+          "price": 1610,
+          "regular": 3220,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 385,
+              "unit": "ml"
+            },
+            "total": {
+              "value": 385,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2090563_ogx-argan-oil-of-morocco-shampoo-385ml-multicolor.png",
+          "url": "https://othoba.com/ogx-argan-oil-of-morocco-shampoo-385ml-multicolor-benifit-cosmetic-864548"
+        }
+      ]
+    },
+    {
+      "query": "soap",
+      "status": 200,
+      "ms": 1532,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1515,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Saffron Handmade Soap-100 gm- Regular (Unpacked/Raw/hand cut) by Latfu",
+          "price": 139,
+          "regular": 1139,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 100,
+              "unit": "g"
+            },
+            "total": {
+              "value": 100,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2318206_saffron-handmade-soap-100-gm-regular-unpackedrawhand-cut-by-latfu.jpeg",
+          "url": "https://othoba.com/saffron-handmade-soap-100-gm-regular-unpackedrawhand-cut-by-latfu-sparkon-934069"
+        },
+        {
+          "title": "250g Transparent glycerin soap base DIY Handmade",
+          "price": 182,
+          "regular": 700,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 250,
+              "unit": "g"
+            },
+            "total": {
+              "value": 250,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1562698_250g-transparent-glycerin-soap-base-diy-handmade.jpeg",
+          "url": "https://othoba.com/250g-transparent-glycerin-soap-base-diy-handmade-shopizobd-701857"
+        },
+        {
+          "title": "Fiorae Papaya & Gluta Plus Kojic Soap 165 gm (Thailand",
+          "price": 122,
+          "regular": 406,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 165,
+              "unit": "g"
+            },
+            "total": {
+              "value": 165,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2126854_fiorae-papaya-gluta-plus-kojic-soap-165-gm-thailand.jpeg",
+          "url": "https://othoba.com/fiorae-papaya-gluta-plus-kojic-soap-165-gm-thailand-6"
+        },
+        {
+          "title": "Fiorae Papaya & Gluta Plus Kojic Soap 165 gm (Thailand",
+          "price": 122,
+          "regular": 406,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 165,
+              "unit": "g"
+            },
+            "total": {
+              "value": 165,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1407345_fiorae-papaya-gluta-plus-kojic-soap-165-gm-thailand.jpeg",
+          "url": "https://othoba.com/fiorae-papaya-gluta-plus-kojic-soap-165-gm-thailand-sm-super-shop-628672"
+        },
+        {
+          "title": "EELHOE Silk Protein Skin Repair Soap",
+          "price": 315,
+          "regular": 986,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false
+          },
+          "image": "https://images.othoba.com/images/thumbs/2005405_eelhoe-silk-protein-skin-repair-soap.webp",
+          "url": "https://othoba.com/eelhoe-silk-protein-skin-repair-soap-ekclick-830717"
+        }
+      ]
+    },
+    {
+      "query": "tissue",
+      "status": 200,
+      "ms": 1957,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1935,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "4 Pcs Bashundhara Gold Toilet Tissue",
+          "price": 108,
+          "regular": 152,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "count": 4,
+            "total": {
+              "value": 4,
+              "unit": "piece"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2507087_bashundhara-gold-toilet-tissue.png",
+          "url": "https://othoba.com/bashundhara-gold-toilet-tissue-bashundhara-fine-paper-mills-limited-687982"
+        },
+        {
+          "title": "Smile Hand Towel Tissue White 150 pcs ×1 ply Tissue pack of 10 packet",
+          "price": 411,
+          "regular": 575,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false
+          },
+          "image": "https://images.othoba.com/images/thumbs/1610335_smile-hand-towel-tissue-white-150-pcs-1-ply-tissue-pack-of-10-packet.jpeg",
+          "url": "https://othoba.com/smile-hand-towel-tissue-white-150-pcs-1-ply-tissue-pack-of-10-packet-zayn-shop-llc-716781"
+        },
+        {
+          "title": "Smile Hand Towel Tissue - White-150pcs ×1 ply Smile Tissue pack of 4 packet",
+          "price": 166,
+          "regular": 230,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false
+          },
+          "image": "https://images.othoba.com/images/thumbs/1610516_smile-hand-towel-tissue-white-150pcs-1-ply-smile-tissue-pack-of-4-packet.jpeg",
+          "url": "https://othoba.com/smile-hand-towel-tissue-white-150pcs-1-ply-smile-tissue-pack-of-4-packet-zayn-shop-llc-716734"
+        },
+        {
+          "title": "Stainless Steel Kitchen Tissue Holder Silver",
+          "price": 372,
+          "regular": 500,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false
+          },
+          "image": "https://images.othoba.com/images/thumbs/0593033_stainless-steel-kitchen-tissue-holder-silver.jpeg",
+          "url": "https://othoba.com/stainless-steel-kitchen-tissue-holder-silver-2"
+        },
+        {
+          "title": "Tissue Box Paper Holder Home Decor",
+          "price": 748,
+          "regular": 890,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false
+          },
+          "image": "https://images.othoba.com/images/thumbs/2003912_tissue-box-paper-holder-home-decor.jpeg",
+          "url": "https://othoba.com/tissue-box-paper-holder-home-decor-beauty-glow-820342"
+        }
+      ]
+    },
+    {
+      "query": "cooking oil",
+      "status": 200,
+      "ms": 1511,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1501,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Fresh Fortified Soyebean Oil - 5ltr",
+          "brand": "Fresh",
+          "price": 990,
+          "regular": 1000,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp",
+          "url": "https://othoba.com/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817"
+        },
+        {
+          "title": "Fresh Rice Bran Oil - 5ltr",
+          "brand": "Fresh",
+          "price": 990,
+          "regular": 1155,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1582375_fresh-rice-bran-oil-5ltr.png",
+          "url": "https://othoba.com/fresh-rice-bran-oil-5ltr-meghna-group-of-industries-709819"
+        },
+        {
+          "title": "Fortune Rice Barn Oil 5ltr",
+          "brand": "Bangladesh Edible Oil Ltd",
+          "price": 1210,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0826333_fortune-rice-barn-oil-5ltr.jpeg",
+          "url": "https://othoba.com/fortune-rice-barn-oil-5ltr-3500000089"
+        },
+        {
+          "title": "Fresh Rice Bran Oil - 5ltr 4 Pcs Bundle",
+          "brand": "Fresh",
+          "price": 3940,
+          "regular": 4620,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": true,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "count": 4,
+            "total": {
+              "value": 20000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2136003_fresh-rice-bran-oil-5ltr-4-pcs-bundle.jpeg",
+          "url": "https://othoba.com/fresh-rice-bran-oil-5ltr-4-pcs-bundle"
+        },
+        {
+          "title": "Fresh Fortified Soyebean Oil - 5ltr 4 Pcs Bundle",
+          "brand": "Fresh",
+          "price": 3940,
+          "regular": 4000,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": true,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "count": 4,
+            "total": {
+              "value": 20000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2136000_fresh-fortified-soyebean-oil-5ltr-4-pcs-bundle.jpeg",
+          "url": "https://othoba.com/fresh-fortified-soyebean-oil-5ltr-4-pcs-bundle"
+        }
+      ]
+    },
+    {
+      "query": "soybean oil 5 ltr",
+      "status": 200,
+      "ms": 1775,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1760,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Fresh Fortified Soyebean Oil - 5ltr",
+          "brand": "Fresh",
+          "price": 990,
+          "regular": 1000,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp",
+          "url": "https://othoba.com/fresh-fortified-soyebean-oil-5ltr-meghna-group-of-industries-709817"
+        },
+        {
+          "title": "Fresh Fortified Soyebean Oil - 5ltr 4 Pcs Bundle",
+          "brand": "Fresh",
+          "price": 3940,
+          "regular": 4000,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": true,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "count": 4,
+            "total": {
+              "value": 20000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2136000_fresh-fortified-soyebean-oil-5ltr-4-pcs-bundle.jpeg",
+          "url": "https://othoba.com/fresh-fortified-soyebean-oil-5ltr-4-pcs-bundle"
+        },
+        {
+          "title": "Fresh Fortified Soyebean Oil - 5ltr",
+          "price": 990,
+          "regular": 1000,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2139066_fresh-fortified-soyebean-oil-5ltr.webp",
+          "url": "https://othoba.com/fresh-fortified-soyebean-oil-5ltr-2"
+        },
+        {
+          "title": "Rupchanda Soybean Oil 5ltr",
+          "brand": "Bangladesh Edible Oil Ltd",
+          "price": 1000,
+          "regular": null,
+          "availability": "out_of_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0485871_rupchanda-soyabean-oil-5ltr.jpeg",
+          "url": "https://othoba.com/rupchanda-soyabean-oil-5ltr-3500000025"
+        },
+        {
+          "title": "Starship Soyabean Oil 5ltr",
+          "price": 1000,
+          "regular": null,
+          "availability": "out_of_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "l"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0951806_starship-soyabean-oil-5ltr.jpeg",
+          "url": "https://othoba.com/starship-soyabean-oil-5ltr-daily-shopping-419343"
+        }
+      ]
+    },
+    {
+      "query": "fresh soybean oil 1 ltr",
+      "status": 200,
+      "ms": 925,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "empty",
+          "durationMs": 917,
+          "resultCount": 0
+        }
+      ],
+      "results": 0,
+      "groups": 0,
+      "multiOfferGroups": [],
+      "offers": []
+    },
+    {
+      "query": "chinigura rice 1kg",
+      "status": 200,
+      "ms": 2050,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 2038,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 4,
+      "multiOfferGroups": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "basis": "attributes",
+          "offers": [
+            "PRAN Aromatic Chinigura Premium Rice 1Kg",
+            "PRAN Aromatic Chinigura Premium Rice 1Kg"
+          ]
+        }
+      ],
+      "offers": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 216,
+          "regular": 230,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0318361_pran-aromatic-chinigura-premium-rice-1kg.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-bmr00006"
+        },
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 210,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1112328_pran-aromatic-chinigura-premium-rice-1kg-copy.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-copy"
+        },
+        {
+          "title": "Rupchanda Chinigura Rice 1 Kg",
+          "brand": "Bangladesh Edible Oil Ltd",
+          "price": 230,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0251707_rupchanda-chinigura-rice-1-kg.jpeg",
+          "url": "https://othoba.com/rupchanda-chinigura-rice-1kg-3500000196"
+        },
+        {
+          "title": "Farmer's Gold Chinigura Broken Rice 1kg",
+          "price": 101,
+          "regular": 120,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0665836_farmers-gold-chinigura-broken-rice-1kg.webp",
+          "url": "https://othoba.com/farmers-gold-chinigura-broken-rice-1kg"
+        },
+        {
+          "title": "Farmer's Gold Chinigura Rice 1kg",
+          "price": 161,
+          "regular": 170,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0665601_farmers-gold-chinigura-rice-1kg.webp",
+          "url": "https://othoba.com/farmers-gold-chinigura-rice-1kg"
+        }
+      ]
+    },
+    {
+      "query": "mr noodles 8 pcs",
+      "status": 200,
+      "ms": 1598,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1588,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 5,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Mr. Noodles Shahi Masala 8 pcs pack",
+          "brand": "Mr. Noodles",
+          "price": 146,
+          "regular": 170,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "count": 8,
+            "total": {
+              "value": 8,
+              "unit": "piece"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1456718_mr-noodles-shahi-masala-8-pcs-pack.jpeg",
+          "url": "https://othoba.com/mr-noodles-shahi-masala-8-pcs-pack"
+        },
+        {
+          "title": "Mr. Noodles Super Spicy 8pcs",
+          "brand": "Mr. Noodles",
+          "price": 181,
+          "regular": 210,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "count": 8,
+            "total": {
+              "value": 8,
+              "unit": "piece"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1045548_mr-noodles-super-spicy-8pcs.png",
+          "url": "https://othoba.com/mr-noodles-super-spicy-8pcs"
+        },
+        {
+          "title": "Mr. Noodles Chicken 8pcs Pack",
+          "brand": "PRAN",
+          "price": 146,
+          "regular": 170,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "count": 8,
+            "total": {
+              "value": 8,
+              "unit": "piece"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1045758_mr-noodles-chicken-8pcs.png",
+          "url": "https://othoba.com/mr-noodles-chicken-8pcs"
+        },
+        {
+          "title": "Mr. Noodles 8pcs Magic Masala",
+          "brand": "Mr. Noodles",
+          "price": 146,
+          "regular": 170,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "count": 8,
+            "total": {
+              "value": 8,
+              "unit": "piece"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1048017_mr-noodles-8pcs-magic-masala.png",
+          "url": "https://othoba.com/mr-noodles-8pcs-magic-masala"
+        },
+        {
+          "title": "Mr. Noodles Low Fat Masala Flavored Noodles (40gmx8pcs)",
+          "brand": "Mr. Noodles",
+          "price": 110,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": true,
+            "bundle": false,
+            "size": {
+              "value": 40,
+              "unit": "g"
+            },
+            "count": 8,
+            "total": {
+              "value": 320,
+              "unit": "g"
+            }
+          },
+          "variant": {
+            "flavour": "Masala"
+          },
+          "image": "https://images.othoba.com/images/thumbs/0709574_mr-noodles-masala-low-fat-40gmx8pcs.jpeg",
+          "url": "https://othoba.com/mr-noodles-masala-low-fat-40gmx8pcs"
+        }
+      ]
+    },
+    {
+      "query": "himalaya shampoo",
+      "status": 200,
+      "ms": 2153,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 2146,
+          "resultCount": 2
+        }
+      ],
+      "results": 2,
+      "groups": 2,
+      "multiOfferGroups": [],
+      "offers": [
+        {
+          "title": "Buy 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml & Get 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml FREE - 340ml",
+          "brand": "Himalaya",
+          "price": 248,
+          "regular": 540,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": true
+          },
+          "image": "https://images.othoba.com/images/thumbs/2410023_buy-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-get-1-himalaya-gentle-daily-care-natu.jpeg",
+          "url": "https://othoba.com/buy-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-get-1-himalaya-gentle-daily-care-natural-protein-shampoo-170ml-free-340ml-himalaya-wellness-bangladesh-969943"
+        },
+        {
+          "title": "Himalaya Gentle Daily Care Natural Protein Shampoo 170ml",
+          "brand": "Himalaya",
+          "price": 124,
+          "regular": 270,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 170,
+              "unit": "ml"
+            },
+            "total": {
+              "value": 170,
+              "unit": "ml"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/2410022_himalaya-gentle-daily-care-natural-protein-shampoo-170ml.jpeg",
+          "url": "https://othoba.com/himalaya-gentle-daily-care-natural-protein-shampoo-170ml-himalaya-wellness-bangladesh-969942"
+        }
+      ]
+    },
+    {
+      "query": "lux soap",
+      "status": 200,
+      "ms": 973,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "empty",
+          "durationMs": 966,
+          "resultCount": 0
+        }
+      ],
+      "results": 0,
+      "groups": 0,
+      "multiOfferGroups": [],
+      "offers": []
+    },
+    {
+      "query": "dettol handwash",
+      "status": 200,
+      "ms": 1369,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "empty",
+          "durationMs": 1359,
+          "resultCount": 0
+        }
+      ],
+      "results": 0,
+      "groups": 0,
+      "multiOfferGroups": [],
+      "offers": []
+    },
+    {
+      "query": "rice",
+      "status": 200,
+      "ms": 1673,
+      "stores": [
+        {
+          "storeId": "othoba",
+          "storeName": "Othoba",
+          "status": "ok",
+          "durationMs": 1666,
+          "resultCount": 5
+        }
+      ],
+      "results": 5,
+      "groups": 4,
+      "multiOfferGroups": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "basis": "attributes",
+          "offers": [
+            "PRAN Aromatic Chinigura Premium Rice 1Kg",
+            "PRAN Aromatic Chinigura Premium Rice 1Kg"
+          ]
+        }
+      ],
+      "offers": [
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 216,
+          "regular": 230,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0318361_pran-aromatic-chinigura-premium-rice-1kg.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-bmr00006"
+        },
+        {
+          "title": "PRAN Chinigura Premium Rice 2kg",
+          "brand": "PRAN Rice",
+          "price": 428,
+          "regular": 450,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 2,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 2000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0319618_pran-chinigura-premium-rice-2kg.jpeg",
+          "url": "https://othoba.com/pran-chinigura-premium-rice-2kg"
+        },
+        {
+          "title": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+          "brand": "PRAN Rice",
+          "price": 210,
+          "regular": null,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 1,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 1000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/1112328_pran-aromatic-chinigura-premium-rice-1kg-copy.jpeg",
+          "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-copy"
+        },
+        {
+          "title": "Pran minicate Zirashail rice 5kg",
+          "price": 440,
+          "regular": 470,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0588368_pran-minicate-rice-5kg.jpeg",
+          "url": "https://othoba.com/pran-minicate-rice-5kg-bmr00041"
+        },
+        {
+          "title": "PRAN Nazirsail Rice 5kg",
+          "brand": "PRAN Rice",
+          "price": 489,
+          "regular": 515,
+          "availability": "in_stock",
+          "pack": {
+            "multipack": false,
+            "bundle": false,
+            "size": {
+              "value": 5,
+              "unit": "kg"
+            },
+            "total": {
+              "value": 5000,
+              "unit": "g"
+            }
+          },
+          "image": "https://images.othoba.com/images/thumbs/0318637_pran-nazirsail-rice-5kg.jpeg",
+          "url": "https://othoba.com/pran-nazirsail-rice-5kg-48461"
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "name": "empty",
+      "status": 400,
+      "ms": 7,
+      "body": "{\"error\":{\"code\":\"INVALID_QUERY\",\"message\":\"Search must be at least 2 characters.\"}}"
+    },
+    {
+      "name": "whitespace",
+      "status": 400,
+      "ms": 6,
+      "body": "{\"error\":{\"code\":\"INVALID_QUERY\",\"message\":\"Search must be at least 2 characters.\"}}"
+    },
+    {
+      "name": "one char",
+      "status": 400,
+      "ms": 6,
+      "body": "{\"error\":{\"code\":\"INVALID_QUERY\",\"message\":\"Search must be at least 2 characters.\"}}"
+    },
+    {
+      "name": "too long",
+      "status": 400,
+      "ms": 5,
+      "body": "{\"error\":{\"code\":\"INVALID_QUERY\",\"message\":\"Search must be at most 120 characters.\"}}"
+    },
+    {
+      "name": "html",
+      "status": 200,
+      "ms": 6,
+      "body": "{\"query\":\"<script>alert(1)</script>\",\"results\":[],\"groups\":[],\"stores\":[{\"storeId\":\"othoba\",\"storeName\":\"Othoba\",\"status\":\"empty\",\"durationMs\":0,\"resultCount\":0}],\"searchedAt\":\"2026-10-03T09:59:57.806Z\"}"
+    },
+    {
+      "name": "symbols",
+      "status": 200,
+      "ms": 6,
+      "body": "{\"query\":\"!!!@@@###\",\"results\":[],\"groups\":[],\"stores\":[{\"storeId\":\"othoba\",\"storeName\":\"Othoba\",\"status\":\"empty\",\"durationMs\":1,\"resultCount\":0}],\"searchedAt\":\"2026-10-03T09:59:57.813Z\"}"
+    },
+    {
+      "name": "bangla",
+      "status": 200,
+      "ms": 5,
+      "body": "{\"query\":\"চাল\",\"results\":[],\"groups\":[],\"stores\":[{\"storeId\":\"othoba\",\"storeName\":\"Othoba\",\"status\":\"empty\",\"durationMs\":0,\"resultCount\":0}],\"searchedAt\":\"2026-10-03T09:59:57.818Z\"}"
+    },
+    {
+      "name": "no result",
+      "status": 200,
+      "ms": 7,
+      "body": "{\"query\":\"zzqqxx nonexistent product\",\"results\":[],\"groups\":[],\"stores\":[{\"storeId\":\"othoba\",\"storeName\":\"Othoba\",\"status\":\"empty\",\"durationMs\":0,\"resultCount\":0}],\"searchedAt\":\"2026-10-03T09:59:57.825Z\"}"
+    },
+    {
+      "name": "not a string",
+      "status": 400,
+      "ms": 6,
+      "body": "{\"error\":{\"code\":\"INVALID_QUERY\",\"message\":\"Enter a product to search for.\"}}"
+    },
+    {
+      "name": "invalid json",
+      "status": 400,
+      "body": "{\"error\":{\"code\":\"INVALID_REQUEST\",\"message\":\"Request body must be valid JSON.\"}}"
+    },
+    {
+      "name": "huge body",
+      "status": 413,
+      "body": "{\"error\":{\"code\":\"PAYLOAD_TOO_LARGE\",\"message\":\"Request is too large.\"}}"
+    },
+    {
+      "name": "GET",
+      "status": 405,
+      "body": ""
+    }
+  ],
+  "ui": [
+    {
+      "viewport": "desktop",
+      "focusedId": "search-query",
+      "groups": 5,
+      "images": [
+        {
+          "src": "https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        },
+        {
+          "src": "https://images.othoba.com/images/thumbs/2139066_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        }
+      ],
+      "placeholders": 3,
+      "overflowX": false,
+      "lowestBadges": 0,
+      "linkFocus": {
+        "outline": "solid 2px",
+        "boxShadow": "none",
+        "target": "_blank",
+        "rel": "noopener noreferrer nofollow",
+        "label": "View on Othoba (opens in a new tab)"
+      },
+      "consoleErrors": [],
+      "imageHosts": [
+        "images.othoba.com"
+      ]
+    },
+    {
+      "viewport": "tablet",
+      "focusedId": "search-query",
+      "groups": 5,
+      "images": [
+        {
+          "src": "https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        },
+        {
+          "src": "https://images.othoba.com/images/thumbs/2139066_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        }
+      ],
+      "placeholders": 3,
+      "overflowX": false,
+      "lowestBadges": 0,
+      "linkFocus": {
+        "outline": "solid 2px",
+        "boxShadow": "none",
+        "target": "_blank",
+        "rel": "noopener noreferrer nofollow",
+        "label": "View on Othoba (opens in a new tab)"
+      },
+      "consoleErrors": [],
+      "imageHosts": [
+        "images.othoba.com"
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "focusedId": "search-query",
+      "groups": 5,
+      "images": [
+        {
+          "src": "https://images.othoba.com/images/thumbs/1582373_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        },
+        {
+          "src": "https://images.othoba.com/images/thumbs/2139066_fresh-fortified-soyebean-oil-5ltr.webp",
+          "loaded": true
+        }
+      ],
+      "placeholders": 3,
+      "overflowX": false,
+      "lowestBadges": 0,
+      "linkFocus": {
+        "outline": "solid 2px",
+        "boxShadow": "none",
+        "target": "_blank",
+        "rel": "noopener noreferrer nofollow",
+        "label": "View on Othoba (opens in a new tab)"
+      },
+      "consoleErrors": [],
+      "imageHosts": [
+        "images.othoba.com"
+      ]
+    },
+    {
+      "states": {
+        "emptyMsg": "Search must be at least 2 characters.",
+        "wsMsg": "Search must be at least 2 characters.",
+        "brokenGroups": 3,
+        "brokenImgs": 0,
+        "brokenPlaceholders": 3,
+        "noResult": 1,
+        "netMsg": "Could not reach the server. Check your connection and try again.Try again",
+        "retry": 1,
+        "recovered": 4
+      }
+    }
+  ],
+  "links": [
+    {
+      "url": "https://othoba.com/persil-detergent-powder-3kg",
+      "appTitle": "Persil Detergent Powder 3kg",
+      "pageH1": "Persil Detergent Powder 3kg",
+      "appPrice": 2595,
+      "priceShown": true,
+      "appRegular": null,
+      "regularShown": null,
+      "appAvailability": "in_stock",
+      "pageStock": "in_stock?"
+    },
+    {
+      "url": "https://othoba.com/fast-wash-detergent-powder-500gm",
+      "appTitle": "Fast Wash Detergent Powder 500gm",
+      "pageH1": "Fast Wash Detergent Powder 500gm",
+      "appPrice": 150,
+      "priceShown": true,
+      "appRegular": null,
+      "regularShown": null,
+      "appAvailability": "out_of_stock",
+      "pageStock": "unclear"
+    },
+    {
+      "url": "https://othoba.com/fast-wash-detergent-powder-1000gm",
+      "appTitle": "Fast Wash Detergent Powder 1000gm",
+      "pageH1": "Fast Wash Detergent Powder 1000gm",
+      "appPrice": 300,
+      "priceShown": true,
+      "appRegular": null,
+      "regularShown": null,
+      "appAvailability": "out_of_stock",
+      "pageStock": "unclear"
+    },
+    {
+      "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-bmr00006",
+      "appTitle": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+      "pageH1": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+      "appPrice": 216,
+      "priceShown": true,
+      "appRegular": 230,
+      "regularShown": true,
+      "appAvailability": "in_stock",
+      "pageStock": "in_stock?"
+    },
+    {
+      "url": "https://othoba.com/pran-chinigura-premium-rice-2kg",
+      "appTitle": "PRAN Chinigura Premium Rice 2kg",
+      "pageH1": "PRAN Chinigura Premium Rice 2kg",
+      "appPrice": 428,
+      "priceShown": true,
+      "appRegular": 450,
+      "regularShown": true,
+      "appAvailability": "in_stock",
+      "pageStock": "in_stock?"
+    },
+    {
+      "url": "https://othoba.com/pran-aromatic-chinigura-premium-rice-1kg-copy",
+      "appTitle": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+      "pageH1": "PRAN Aromatic Chinigura Premium Rice 1Kg",
+      "appPrice": 210,
+      "priceShown": true,
+      "appRegular": null,
+      "regularShown": null,
+      "appAvailability": "in_stock",
+      "pageStock": "in_stock?"
+    }
+  ],
+  "failures": [],
+  "production": {
+    "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.othoba.com https://othoba.com; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "xfo": "DENY",
+    "groups": 5,
+    "loadedImages": 2,
+    "consoleErrors": [],
+    "imageHosts": [
+      "images.othoba.com"
+    ]
+  },
+  "finishedAt": "2026-10-03T10:00:28.244Z"
+}

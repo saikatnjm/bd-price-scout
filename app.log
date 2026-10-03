@@ -1,0 +1,48 @@
+app-1  | 
+app-1  | > bd-price-scout@0.1.0 dev
+app-1  | > next dev --hostname 0.0.0.0
+app-1  | 
+app-1  | ▲ Next.js 16.3.8 (Turbopack)
+app-1  | - Local:         http://localhost:3000
+app-1  | - Network:       http://0.0.0.0:3000
+app-1  | ✓ Ready in 530ms
+app-1  | ✓ Running next.config.ts took 49ms
+app-1  | 
+app-1  |  GET / 200 in 2.1s (next.js: 1933ms, application-code: 207ms)
+app-1  |  GET / 200 in 43ms (next.js: 6ms, application-code: 38ms)
+app-1  |  POST /api/search 200 in 3.8s (next.js: 977ms, application-code: 2.8s)
+app-1  |  POST /api/search 200 in 1650ms (next.js: 3ms, application-code: 1647ms)
+app-1  |  POST /api/search 200 in 1872ms (next.js: 2ms, application-code: 1870ms)
+app-1  |  POST /api/search 200 in 1522ms (next.js: 2ms, application-code: 1520ms)
+app-1  |  POST /api/search 200 in 1947ms (next.js: 4ms, application-code: 1943ms)
+app-1  |  POST /api/search 200 in 1508ms (next.js: 3ms, application-code: 1505ms)
+app-1  |  POST /api/search 200 in 1767ms (next.js: 3ms, application-code: 1765ms)
+app-1  |  POST /api/search 200 in 923ms (next.js: 2ms, application-code: 920ms)
+app-1  |  POST /api/search 200 in 2.0s (next.js: 1.8ms, application-code: 2.0s)
+app-1  |  POST /api/search 200 in 1595ms (next.js: 1.5ms, application-code: 1593ms)
+app-1  |  POST /api/search 200 in 2.2s (next.js: 1.6ms, application-code: 2.1s)
+app-1  |  POST /api/search 200 in 972ms (next.js: 1.6ms, application-code: 970ms)
+app-1  |  POST /api/search 200 in 1366ms (next.js: 3ms, application-code: 1363ms)
+app-1  |  POST /api/search 200 in 1671ms (next.js: 1.6ms, application-code: 1670ms)
+app-1  |  POST /api/search 400 in 5ms (next.js: 1.7ms, application-code: 3ms)
+app-1  |  POST /api/search 400 in 4ms (next.js: 1.4ms, application-code: 3ms)
+app-1  |  POST /api/search 400 in 4ms (next.js: 1.3ms, application-code: 2ms)
+app-1  |  POST /api/search 400 in 4ms (next.js: 1.3ms, application-code: 2ms)
+app-1  |  POST /api/search 200 in 4ms (next.js: 1.2ms, application-code: 3ms)
+app-1  |  POST /api/search 200 in 5ms (next.js: 1.5ms, application-code: 3ms)
+app-1  |  POST /api/search 200 in 4ms (next.js: 1.2ms, application-code: 3ms)
+app-1  |  POST /api/search 200 in 5ms (next.js: 1.4ms, application-code: 3ms)
+app-1  |  POST /api/search 400 in 5ms (next.js: 1.7ms, application-code: 3ms)
+app-1  |  POST /api/search 400 in 4ms (next.js: 1.3ms, application-code: 2ms)
+app-1  |  POST /api/search 413 in 4ms (next.js: 1.8ms, application-code: 2ms)
+app-1  |  GET /api/search 405 in 4ms (next.js: 1.2ms, application-code: 2ms)
+app-1  |  GET / 200 in 77ms (next.js: 3ms, application-code: 74ms)
+app-1  |  POST /api/search 200 in 2.1s (next.js: 2ms, application-code: 2.1s)
+app-1  |  GET / 200 in 36ms (next.js: 11ms, application-code: 25ms)
+app-1  |  POST /api/search 200 in 2.3s (next.js: 2ms, application-code: 2.3s)
+app-1  |  GET / 200 in 29ms (next.js: 2ms, application-code: 27ms)
+app-1  |  POST /api/search 200 in 2.6s (next.js: 3ms, application-code: 2.6s)
+app-1  |  GET / 200 in 33ms (next.js: 9ms, application-code: 24ms)
+app-1  |  POST /api/search 200 in 2.4s (next.js: 2ms, application-code: 2.4s)
+app-1  |  POST /api/search 200 in 8ms (next.js: 2ms, application-code: 6ms)
+app-1  |  POST /api/search 200 in 1548ms (next.js: 1.9ms, application-code: 1546ms)

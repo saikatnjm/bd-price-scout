@@ -1,0 +1,2 @@
+CONTAINER ID   NAME                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O          BLOCK I/O    PIDS
+494a29d8b4db   bd-price-scout-app-1   0.09%     933.6MiB / 15.61GiB   5.84%     19.4MB / 770kB   0B / 158MB   81

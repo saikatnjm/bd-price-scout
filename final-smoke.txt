@@ -1,0 +1,8 @@
+OK  GET / (200, UI shell, security headers)
+OK  POST /api/search valid -> 200 {"query":"Samsung Galaxy S25 Ultra 256GB","results":[],"groups":[],"stores":[{"storeId":"othoba","storeName":"Othoba","status":"empty","durationMs":3,"resultCount":0}],"searchedAt":"2026-10-03T10:00:3
+OK  live Othoba search -> "durationMs":2265, "resultCount":5
+OK  POST /api/search invalid -> 400 structured errors
+OK  GET /api/search -> 405
+OK  14 client JS chunks contain no server-only config or code
+SMOKE PASSED: http://localhost:3000
+::notice title=Passed: .github/scripts/smoke.sh http://localhost:3000::---%0AOK  GET / (200, UI shell, security headers)%0AOK  POST /api/search valid -> 200 {"query":"Samsung Galaxy S25 Ultra 256GB","results":[],"groups":[],"stores":[{"storeId":"othoba","storeName":"Othoba","status":"empty","durationMs":3,"resultCount":0}],"searchedAt":"2026-10-03T10:00:3%0AOK  live Othoba search -> "durationMs":2265, "resultCount":5%0AOK  POST /api/search invalid -> 400 structured errors%0AOK  GET /api/search -> 405%0AOK  14 client JS chunks contain no server-only config or code%0ASMOKE PASSED: http://localhost:3000%0A
