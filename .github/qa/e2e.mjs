@@ -109,6 +109,15 @@ for (const [name, r] of [
   if (r.status >= 500) fail(`error case ${name} -> HTTP ${r.status}`);
 }
 
+// Submits a search through the UI and waits until it has finished (the results section is
+// aria-busy while loading). Validation errors never become busy, hence the short first wait.
+async function submit(page, q) {
+  await page.fill("#search-query", q);
+  await page.press("#search-query", "Enter");
+  await page.waitForSelector('main [aria-busy="true"]', { timeout: 2000 }).catch(() => {});
+  await page.waitForSelector('main [aria-busy="false"]', { timeout: 30000 });
+}
+
 // 3. UI at three viewports.
 const browser = await chromium.launch();
 const VIEWPORTS = { desktop: { width: 1280, height: 900 }, tablet: { width: 820, height: 1180 }, mobile: { width: 390, height: 844 } };
@@ -176,45 +185,38 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   await page.goto(BASE, { waitUntil: "networkidle" });
   await page.locator('main button[type="submit"]').click();
   const emptyMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
-  await page.fill("#search-query", "    ");
-  await page.keyboard.press("Enter");
+  await submit(page, "    ");
   const wsMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
   await page.screenshot({ path: `${OUT}/state-empty.png` });
 
   await page.route(/\.(png|jpe?g|webp|gif)(\?|$)/i, (r) => r.fulfill({ status: 404, body: "" }));
-  await page.fill("#search-query", "detergent");
-  await page.keyboard.press("Enter");
-  await page.waitForSelector('[data-testid="product-group"], [role="alert"]', { timeout: 30000 });
+  await submit(page, "detergent");
   await page.waitForTimeout(500);
-  const brokenImgs = await page.$$eval('[data-testid="product-group"] img', (imgs) => imgs.length);
-  const brokenPlaceholders = await page.locator('[aria-label="No image available"], [data-image-fallback]').count();
-  const brokenGroups = await page.locator('[data-testid="product-group"]').count();
+  const brokenImgs = await page.$$eval('main [data-testid="product-group"] img', (imgs) => imgs.length);
+  const brokenPlaceholders = await page.locator('main [aria-label="No image available"]').count();
+  const brokenGroups = await page.locator('main [data-testid="product-group"]').count();
   await page.screenshot({ path: `${OUT}/state-broken-images.png`, fullPage: true });
   await page.unroute(/\.(png|jpe?g|webp|gif)(\?|$)/i);
 
-  await page.fill("#search-query", "zzqqxx nonexistent product");
-  await page.keyboard.press("Enter");
-  await page.waitForSelector('text=No products found', { timeout: 30000 }).catch(() => {});
+  await submit(page, "zzqqxx nonexistent product");
   const noResult = await page.locator("main").getByText("No products found").count();
   await page.screenshot({ path: `${OUT}/state-no-results.png` });
 
   await page.route("**/api/search", (r) => r.abort("failed"));
-  await page.fill("#search-query", "rice");
-  await page.keyboard.press("Enter");
-  await page.waitForSelector('main [role="alert"]', { timeout: 10000 }).catch(() => {});
+  await submit(page, "rice");
   const netMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
   const retry = await page.getByRole("button", { name: /try again/i }).count();
   await page.screenshot({ path: `${OUT}/state-network-error.png` });
   await page.unroute("**/api/search");
   if (retry) {
     await page.getByRole("button", { name: /try again/i }).click();
-    await page.waitForSelector('[data-testid="product-group"]', { timeout: 30000 }).catch(() => {});
+    await page.waitForSelector('main [data-testid="product-group"]', { timeout: 30000 }).catch(() => {});
   }
-  const recovered = await page.locator('[data-testid="product-group"]').count();
+  const recovered = await page.locator('main [data-testid="product-group"]').count();
 
   report.ui.push({ states: { emptyMsg, wsMsg, brokenGroups, brokenImgs, brokenPlaceholders, noResult, netMsg, retry, recovered } });
   if (!emptyMsg || !wsMsg) fail("empty/whitespace search shows no message");
-  if (brokenImgs !== 0 || brokenPlaceholders !== brokenGroups) fail("broken images not replaced by placeholders");
+  if (brokenGroups === 0 || brokenImgs !== 0 || brokenPlaceholders !== brokenGroups) fail("broken images not replaced by placeholders");
   if (noResult !== 1) fail("no-result state not shown");
   if (!netMsg || retry !== 1 || recovered === 0) fail("network failure state or retry broken");
   await page.close();
@@ -254,9 +256,7 @@ if (process.env.PROD_URL) {
   page.on("request", (r) => r.resourceType() === "image" && imageHosts.add(new URL(r.url()).hostname));
   const res = await page.goto(PROD, { waitUntil: "networkidle" });
   const headers = res.headers();
-  await page.fill("#search-query", "rice");
-  await page.keyboard.press("Enter");
-  await page.locator('main [data-testid="product-group"]').or(page.locator('main [role="alert"]')).first().waitFor({ timeout: 30000 });
+  await submit(page, "soybean oil 5 ltr");
   await page.waitForLoadState("networkidle");
   const groups = await page.locator('main [data-testid="product-group"]').count();
   const loadedImages = await page.$$eval("main img", (imgs) => imgs.filter((i) => i.complete && i.naturalWidth > 0).length);
@@ -264,6 +264,7 @@ if (process.env.PROD_URL) {
   report.production = { csp: headers["content-security-policy"], xfo: headers["x-frame-options"], groups, loadedImages, consoleErrors, imageHosts: [...imageHosts] };
   if (!headers["content-security-policy"]) fail("production: no CSP header");
   if (groups === 0) fail("production: no results rendered");
+  if (loadedImages === 0) fail("production: no product image loaded");
   for (const h of imageHosts) if (!ALLOWED_IMAGE_HOSTS.has(h) && h !== new URL(PROD).hostname) fail(`production: image from ${h}`);
   for (const e of consoleErrors) if (!/status of 403/.test(e)) fail(`production: console error ${e}`);
   await page.close();
