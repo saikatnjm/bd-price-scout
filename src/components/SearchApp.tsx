@@ -60,7 +60,7 @@ export function SearchApp() {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g. Samsung Galaxy S25 Ultra 256GB"
+          placeholder="e.g. soybean oil 5 ltr"
           maxLength={QUERY_MAX_LENGTH}
           autoComplete="off"
           className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-base outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 dark:border-slate-700 dark:bg-slate-900"
@@ -81,7 +81,7 @@ export function SearchApp() {
 
         {state.status === "loading" && (
           <div role="status" className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
-            <span className="size-4 animate-spin rounded-full border-2 border-slate-300 border-t-emerald-700" />
+            <span aria-hidden="true" className="size-4 animate-spin rounded-full border-2 border-slate-300 border-t-emerald-700" />
             Searching stores for “{state.query}”…
           </div>
         )}

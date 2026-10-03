@@ -59,7 +59,8 @@ function OfferRow({ offer, lowestPrice }: { offer: Offer; lowestPrice?: number }
             rel="noopener noreferrer nofollow"
             className="mt-1 inline-block text-xs font-medium text-emerald-700 underline dark:text-emerald-400"
           >
-            View product
+            View on {offer.storeName}
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
         )}
       </div>
@@ -69,6 +70,7 @@ function OfferRow({ offer, lowestPrice }: { offer: Offer; lowestPrice?: number }
 
 function GroupCard({ group }: { group: ComparisonGroup }) {
   const pack = formatPack(group.pack);
+  const variant = [group.variant?.flavour, group.variant?.scent, group.variant?.colour].filter(Boolean).join(" · ") || undefined;
   const imageSrc = group.imageUrl && isSafeHttpUrl(group.imageUrl) ? group.imageUrl : undefined;
 
   return (
@@ -81,12 +83,15 @@ function GroupCard({ group }: { group: ComparisonGroup }) {
             {pack && (
               <span className="rounded bg-slate-100 px-1.5 py-0.5 text-slate-700 dark:bg-slate-800 dark:text-slate-300">{pack}</span>
             )}
+            {variant && (
+              <span className="rounded bg-slate-100 px-1.5 py-0.5 text-slate-700 dark:bg-slate-800 dark:text-slate-300">{variant}</span>
+            )}
             {group.brand && <span>{group.brand}</span>}
             {group.storeCount > 1 && <span>Same product at {group.storeCount} stores</span>}
           </div>
         </div>
       </div>
-      <ul className="mt-2 divide-y divide-slate-100 pl-[76px] dark:divide-slate-800">
+      <ul className="mt-2 divide-y divide-slate-100 sm:pl-[76px] dark:divide-slate-800">
         {group.offers.map((offer) => (
           <OfferRow key={`${offer.storeId}:${offer.url}`} offer={offer} lowestPrice={group.lowestPrice} />
         ))}
@@ -104,16 +109,24 @@ export function SearchResults({ data }: { data: SearchResponse }) {
     <div className="space-y-6">
       {data.groups.length === 0 ? (
         <div className="rounded-lg border border-dashed border-slate-300 p-6 text-center text-sm text-slate-600 dark:border-slate-700 dark:text-slate-400">
-          {data.stores.length === 0
-            ? "No stores are configured yet."
-            : allFailed
-              ? "Stores could not be searched right now. Please try again."
-              : `No products found for “${data.query}”.`}
+          <p>
+            {data.stores.length === 0
+              ? "No stores are configured yet."
+              : allFailed
+                ? "Stores could not be searched right now. Please try again."
+                : `No products found for “${data.query}”.`}
+          </p>
+          {data.stores.length > 0 && !allFailed && (
+            <p className="mt-1 text-xs text-slate-500">
+              Stores are searched by category and only the first pages are checked, so some products can be missed. Try an English product name such as “rice 5kg”.
+            </p>
+          )}
         </div>
       ) : (
         <>
           {storesWithResults.length === 1 && (
             <p className="text-xs text-slate-500">
+              {data.groups.length} {data.groups.length === 1 ? "product" : "products"}.{" "}
               Results from {storesWithResults[0]} only, so prices are not compared across stores.
             </p>
           )}

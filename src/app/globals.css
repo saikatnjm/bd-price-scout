@@ -3,3 +3,11 @@
 :root {
   color-scheme: light dark;
 }
+
+/* Visible keyboard focus everywhere; in the base layer so component utilities can refine it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-emerald-600);
+    outline-offset: 2px;
+  }
+}

@@ -72,7 +72,7 @@ describe("SearchApp", () => {
     // Missing image: placeholder instead of a broken image.
     expect(screen.getByRole("img", { name: "No image available" })).toBeTruthy();
     // Only the safe http(s) link is rendered.
-    const links = screen.getAllByRole("link", { name: "View product" }) as HTMLAnchorElement[];
+    const links = screen.getAllByRole("link", { name: "View on Store A (opens in a new tab)" }) as HTMLAnchorElement[];
     expect(links.map((l) => l.href)).toEqual(["https://a.example/1"]);
     expect(links[0]?.target).toBe("_blank");
     expect(screen.getByRole("note").textContent).toContain("Store B (Timed out)");
@@ -130,15 +130,17 @@ describe("SearchApp", () => {
       stores: [{ storeId: "othoba", storeName: "Othoba", status: "ok", durationMs: 10, resultCount: 2 }],
       results: [
         { storeId: "othoba", storeName: "Othoba", title: "Oil 5L", url: "https://othoba.example/1", price: 990, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
-        { storeId: "othoba", storeName: "Othoba", title: "Oil 1L", url: "https://othoba.example/2", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", checkedAt: "" },
+        { storeId: "othoba", storeName: "Othoba", title: "Oil 1L", url: "https://othoba.example/2", price: 200, regularPrice: null, currency: "BDT", availability: "in_stock", variant: { flavour: "Masala" }, checkedAt: "" },
       ],
     };
     vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(data)));
     render(<SearchApp />);
     search("oil");
-    expect(await screen.findByText("Results from Othoba only, so prices are not compared across stores.")).toBeTruthy();
+    expect(await screen.findByText("2 products. Results from Othoba only, so prices are not compared across stores.")).toBeTruthy();
     expect(screen.getAllByTestId("product-group")).toHaveLength(2);
     expect(screen.queryByText("Lowest price")).toBeNull();
+    // Meaningful variants are shown next to the pack size.
+    expect(screen.getByText("Masala")).toBeTruthy();
   });
 
   it("shows a confirmed multi-store group side by side with the lowest in-stock price marked", async () => {
@@ -159,7 +161,7 @@ describe("SearchApp", () => {
     // Lowest among in-stock offers (৳55), not the cheaper out-of-stock one (৳50).
     expect(screen.getByText("৳55").textContent).toContain("Lowest price");
     expect(screen.getByText("৳50").textContent).not.toContain("Lowest price");
-    const links = (screen.getAllByRole("link", { name: "View product" }) as HTMLAnchorElement[]).map((l) => l.href);
+    const links = (screen.getAllByRole("link", { name: /^View on Store/ }) as HTMLAnchorElement[]).map((l) => l.href);
     expect(links).toEqual(["https://one.example/lux", "https://two.example/lux", "https://three.example/lux"]);
     expect(screen.queryByText(/Results from .* only/)).toBeNull();
   });

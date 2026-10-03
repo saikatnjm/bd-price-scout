@@ -132,8 +132,8 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   await page.screenshot({ path: `${OUT}/${name}-2-loading.png` });
   await page
     .locator('[data-testid="product-group"]')
-    .or(page.locator('[role="alert"]'))
-    .or(page.getByText("No products found"))
+    .or(page.locator('main [role="alert"]'))
+    .or(page.locator("main").getByText("No products found"))
     .first()
     .waitFor({ timeout: 30000 });
   await page.waitForLoadState("networkidle");
@@ -149,7 +149,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
 
   // Focus ring on the first product link.
   let linkFocus;
-  const firstLink = page.getByRole("link").first();
+  const firstLink = page.locator("main a").first();
   if ((await firstLink.count()) > 0) {
     await firstLink.focus();
     linkFocus = await firstLink.evaluate((el) => {
@@ -174,11 +174,11 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
 {
   const page = await browser.newPage({ viewport: VIEWPORTS.mobile });
   await page.goto(BASE, { waitUntil: "networkidle" });
-  await page.getByRole("button").first().click();
-  const emptyMsg = await page.locator('[role="alert"]').textContent().catch(() => null);
+  await page.locator('main button[type="submit"]').click();
+  const emptyMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
   await page.fill("#search-query", "    ");
   await page.keyboard.press("Enter");
-  const wsMsg = await page.locator('[role="alert"]').textContent().catch(() => null);
+  const wsMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
   await page.screenshot({ path: `${OUT}/state-empty.png` });
 
   await page.route(/\.(png|jpe?g|webp|gif)(\?|$)/i, (r) => r.fulfill({ status: 404, body: "" }));
@@ -195,14 +195,14 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   await page.fill("#search-query", "zzqqxx nonexistent product");
   await page.keyboard.press("Enter");
   await page.waitForSelector('text=No products found', { timeout: 30000 }).catch(() => {});
-  const noResult = await page.getByText("No products found").count();
+  const noResult = await page.locator("main").getByText("No products found").count();
   await page.screenshot({ path: `${OUT}/state-no-results.png` });
 
   await page.route("**/api/search", (r) => r.abort("failed"));
   await page.fill("#search-query", "rice");
   await page.keyboard.press("Enter");
-  await page.waitForSelector('[role="alert"]', { timeout: 10000 }).catch(() => {});
-  const netMsg = await page.locator('[role="alert"]').textContent().catch(() => null);
+  await page.waitForSelector('main [role="alert"]', { timeout: 10000 }).catch(() => {});
+  const netMsg = await page.locator('main [role="alert"]').textContent().catch(() => null);
   const retry = await page.getByRole("button", { name: /try again/i }).count();
   await page.screenshot({ path: `${OUT}/state-network-error.png` });
   await page.unroute("**/api/search");
