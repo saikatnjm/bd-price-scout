@@ -21,4 +21,5 @@ jobs:
       - env:
           BASE_URL: ${{ inputs.url }}
           SMOKE_LIVE_SEARCH: "1"
+          SMOKE_EXPECT_CSP: "1"
         run: .github/scripts/run.sh .github/scripts/smoke.sh "$BASE_URL" "$GITHUB_SHA"

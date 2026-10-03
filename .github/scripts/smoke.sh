@@ -32,6 +32,8 @@ if [ "${SMOKE_LIVE_SEARCH:-}" = 1 ]; then
   [ "$code" = 200 ] && grep -q '"status":"ok"' "$tmp/live.json" && grep -q '"url":"https://othoba.com/' "$tmp/live.json" \
     || fail "live search -> $code $(head -c 400 "$tmp/live.json")"
   echo "OK  live Othoba search -> $(grep -o '"durationMs":[0-9]*' "$tmp/live.json" | head -1), $(grep -o '"resultCount":[0-9]*' "$tmp/live.json" | head -1)"
+fi
+if [ "${SMOKE_EXPECT_CSP:-}" = 1 ]; then
   grep -qi '^content-security-policy:' "$tmp/home.h" || fail "missing Content-Security-Policy header (production build)"
   echo "OK  Content-Security-Policy present"
 fi

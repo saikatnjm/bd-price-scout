@@ -63,6 +63,14 @@ jobs:
           docker stats --no-stream app 2>/dev/null > qa-out/stats.txt || docker stats --no-stream > qa-out/stats.txt
           docker compose logs app > qa-out/app.log 2>&1
           ! grep -iE "unhandled|uncaught|⨯" qa-out/app.log
+      - name: Restart from a normal (cached) build and smoke test again
+        run: |
+          docker compose down
+          docker compose build
+          docker compose up -d
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:3000/ && break; sleep 2; done
+          SMOKE_LIVE_SEARCH=1 .github/scripts/run.sh .github/scripts/smoke.sh http://localhost:3000 | tee -a qa-out/final-smoke.txt
+          ! docker compose logs app | grep -iE "unhandled|uncaught|⨯"
       - name: Publish results to the qa-results branch
         if: always()
         run: |
