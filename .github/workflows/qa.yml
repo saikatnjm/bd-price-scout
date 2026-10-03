@@ -4,6 +4,10 @@
 name: Docker E2E QA
 
 on:
+  # Also runs on pushes to qa/** branches, so a branch can be checked before its workflow
+  # file reaches the default branch (workflow_dispatch only sees the default branch's file).
+  push:
+    branches: ["qa/**"]
   workflow_dispatch:
     inputs:
       no_cache:
@@ -26,7 +30,7 @@ jobs:
       - name: Clean build
         run: |
           docker compose down -v
-          .github/scripts/run.sh docker compose build ${{ inputs.no_cache && '--no-cache' || '' }}
+          .github/scripts/run.sh docker compose build ${{ inputs.no_cache == false && '' || '--no-cache' }}
       # The container runs as uid 1000 (node); the runner's checkout belongs to another uid.
       - run: sudo chown -R 1000:1000 . && sudo chmod -R a+rwX qa-out
       - name: Start
