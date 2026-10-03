@@ -25,7 +25,9 @@ const COUNT_PATTERNS = [
   /\bpack\s+of\s+(\d+)\b/gi,
   /(?<![\w.])(\d+)\s*-\s*pack\b/gi,
 ];
-const BUNDLE = /\b(bundle|combo)\b|buy\s*1\s*get\s*1|\bb1g1\b|\bbogo(f)?\b/i;
+// Bundle wording, including spread-out offers such as
+// "Buy 1 Himalaya Shampoo 170ml & Get 1 Himalaya Shampoo 170ml FREE".
+const BUNDLE = /\b(bundle|combo)\b|\bb\d+g\d+\b|\bbogo(f)?\b|\bbuy\s*(\d+|one)\b.*?\bget\s*(\d+|one)\b/i;
 
 interface Size {
   value: number;

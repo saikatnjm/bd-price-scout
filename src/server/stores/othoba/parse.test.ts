@@ -86,6 +86,19 @@ describe("parseProductPage (edge cases)", () => {
     expect(img("http://images.othoba.com/x.jpg")).toBeUndefined();
   });
 
+  it("drops a brand that is really the seller's name, but keeps a brand sold by its own store", () => {
+    const withBrand = (brand: string, seller: string) =>
+      parseProductPage(productHtml({ ...base, brand, offers: { ...base.offers, seller } }), "https://othoba.com/x");
+    // Observed live: Dark Fantasy biscuits "Brand: VistaMart  Seller: VistaMart".
+    expect(withBrand("VistaMart", "VistaMart")).toMatchObject({ seller: "VistaMart" });
+    expect(withBrand("VistaMart", "VistaMart")?.brand).toBeUndefined();
+    // Observed live: PRAN rice "Brand: Bango Millers  Seller: Bango Millers Ltd.".
+    expect(withBrand("Bango Millers", "Bango Millers Ltd.")?.brand).toBeUndefined();
+    // A brand's own store keeps the brand.
+    expect(withBrand("Himalaya", "Himalaya Wellness Bangladesh")?.brand).toBe("Himalaya");
+    expect(withBrand("PRAN Rice", "Bango Millers Ltd.")?.brand).toBe("PRAN Rice");
+  });
+
   it("leaves missing optional fields absent and rejects foreign URLs", () => {
     const p = parseProductPage(
       productHtml({ ...base, brand: "", sku: "", url: "https://evil.example/p", image: "javascript:x" }),

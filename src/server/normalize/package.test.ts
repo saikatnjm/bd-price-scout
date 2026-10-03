@@ -67,6 +67,14 @@ describe("parsePackage: pieces, multipacks and bundles", () => {
     expect(bundle).toMatchObject({ bundle: true, count: 4, multipack: true, total: { value: 20000, unit: "ml" } });
     expect(parsePackage("Shampoo 180(±)10ml (Buy1 Get1 Free)").bundle).toBe(true);
     expect(parsePackage("Rice Combo Offer").bundle).toBe(true);
+    // Observed live on Othoba: spread-out buy-1-get-1 wording.
+    const bogo = parsePackage(
+      "Buy 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml & Get 1 Himalaya Gentle Daily Care Natural Protein Shampoo 170ml FREE - 340ml",
+    );
+    expect(bogo.bundle).toBe(true);
+    expect(bogo.size).toBeUndefined(); // 170ml and 340ml both stated: not guessed
+    expect(parsePackage("Shampoo Buy One Get One").bundle).toBe(true);
+    expect(parsePackage("Buyer's Choice Rice 1kg").bundle).toBe(false);
   });
 });
 

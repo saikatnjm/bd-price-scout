@@ -9,10 +9,19 @@ import "server-only";
 export interface OthobaCategory {
   slug: string;
   keywords: readonly string[];
+  /**
+   * Generic words that describe the whole category ("cooking oil") but rarely appear in
+   * product names. They are not required in names when this category is searched.
+   */
+  descriptors?: readonly string[];
 }
 
 export const OTHOBA_CATEGORIES: readonly OthobaCategory[] = [
-  { slug: "oil", keywords: ["oil", "soybean", "soyabean", "soyebean", "mustard", "sunflower", "olive"] },
+  {
+    slug: "oil",
+    keywords: ["oil", "soybean", "soyabean", "soyebean", "mustard", "sunflower", "olive"],
+    descriptors: ["cooking", "edible"],
+  },
   { slug: "rice", keywords: ["rice", "chinigura", "miniket", "nazirshail", "basmati", "polao"] },
   { slug: "flour", keywords: ["flour", "atta", "maida", "suji"] },
   { slug: "lentil", keywords: ["dal", "daal", "lentil", "lentils", "masoor", "moong", "mug"] },
@@ -28,7 +37,10 @@ export const OTHOBA_CATEGORIES: readonly OthobaCategory[] = [
   { slug: "ghee-butter", keywords: ["ghee", "butter"] },
   { slug: "tea-coffee", keywords: ["tea", "coffee"] },
   { slug: "beverages", keywords: ["juice", "drink", "drinks", "soda", "cola"] },
-  { slug: "cleaning-supplies", keywords: ["cleaner", "cleaning", "detergent", "dishwash", "bleach", "toilet", "floor"] },
+  {
+    slug: "cleaning-supplies",
+    keywords: ["cleaner", "cleaning", "detergent", "dishwash", "dishwashing", "bleach", "toilet", "floor"],
+  },
   { slug: "soap", keywords: ["soap", "handwash", "bodywash"] },
   { slug: "shampoo", keywords: ["shampoo", "conditioner"] },
   { slug: "toothpaste", keywords: ["toothpaste"] },

@@ -8,7 +8,7 @@ export function cleanText(value: unknown): string | undefined {
   return text === "" ? undefined : text;
 }
 
-const PLACEHOLDER_BRANDS = new Set(["n/a", "na", "none", "null", "-", "no brand", "unbranded"]);
+const PLACEHOLDER_BRANDS = new Set(["n/a", "na", "none", "null", "-", "no brand", "unbranded", "other", "others", "generic"]);
 
 export function normalizeBrand(value: unknown): string | undefined {
   const brand = cleanText(value);

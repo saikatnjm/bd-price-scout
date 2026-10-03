@@ -113,6 +113,28 @@ function findProductJsonLd($: cheerio.CheerioAPI): JsonObject | null {
   return null;
 }
 
+const COMPANY_SUFFIX = /\b(ltd|limited|pvt|private|co|company|inc|corp|corporation)\b/g;
+
+function party(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(COMPANY_SUFFIX, " ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Othoba's "Brand" field is sometimes filled with the marketplace seller's name
+ * (observed: Brand "VistaMart" / Seller "VistaMart" on a Dark Fantasy biscuit,
+ * Brand "Bango Millers" / Seller "Bango Millers Ltd." on PRAN rice). Such a value says
+ * who sells the item, not who makes it, so it is dropped rather than shown as a brand.
+ * Only an exact name match (ignoring company suffixes) is dropped: a brand's own store
+ * ("Himalaya" sold by "Himalaya Wellness Bangladesh") keeps its brand.
+ */
+function brandUnlessSeller(brand: string | undefined, seller: string | undefined): string | undefined {
+  if (!brand || !seller) return brand;
+  const b = party(brand);
+  const s = party(seller);
+  if (b === "" || b === s) return undefined;
+  return brand;
+}
+
 /**
  * Extracts a product from an Othoba product page's JSON-LD. Returns null when the page
  * has no usable Product data. Missing fields stay absent; nothing is guessed.
@@ -141,6 +163,8 @@ export function parseProductPage(html: string, pageUrl: string): StoreCandidate 
   const microdata = money($('[itemprop="price"]').first().attr("content"));
   if (currency !== "BDT" || (price !== null && microdata !== null && microdata !== price)) price = null;
 
+  const seller = text(offer.seller) ?? text(product.custom_label_0);
+
   return {
     title,
     url: othobaUrl(offer.url) ?? othobaUrl(product.url) ?? pageUrl,
@@ -150,8 +174,8 @@ export function parseProductPage(html: string, pageUrl: string): StoreCandidate 
     imageUrl: imageUrl(Array.isArray(product.image) ? product.image[0] : product.image),
     storeProductId: text(product.id),
     sku: text(product.sku) ?? text(offer.sku),
-    brand: text(product.brand),
-    seller: text(offer.seller) ?? text(product.custom_label_0),
+    brand: brandUnlessSeller(text(product.brand), seller),
+    seller,
     category: text(product.category),
   };
 }

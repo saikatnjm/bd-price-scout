@@ -7,6 +7,7 @@ describe("normalizeBrand", () => {
     expect(normalizeBrand("Fresh")).not.toBe(normalizeBrand("Teer"));
     expect(normalizeBrand("")).toBeUndefined();
     expect(normalizeBrand("N/A")).toBeUndefined();
+    expect(normalizeBrand("Others")).toBeUndefined(); // observed live on Othoba
     expect(normalizeBrand(42)).toBeUndefined();
   });
 });

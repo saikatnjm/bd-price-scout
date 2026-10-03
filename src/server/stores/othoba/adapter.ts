@@ -54,7 +54,10 @@ export const othobaAdapter: StoreAdapter = {
     const categories = selectCategories(tokens, MAX_CATEGORIES);
     if (tokens.length === 0 || categories.length === 0) return []; // Query outside the supported categories.
 
-    const perCategory = await allOrFirstError(categories.map((c) => findCards(c.slug, tokens, ctx)));
+    // Category descriptors ("cooking" in "cooking oil") pick the category but are not required in names.
+    const descriptors = new Set(categories.flatMap((c) => c.descriptors ?? []));
+    const required = tokens.filter((t) => !descriptors.has(t));
+    const perCategory = await allOrFirstError(categories.map((c) => findCards(c.slug, required, ctx)));
     const unique = new Map<string, OthobaCard>();
     for (const card of perCategory.flat()) if (!unique.has(card.productId)) unique.set(card.productId, card);
     const cards = [...unique.values()].slice(0, MAX_PRODUCTS);

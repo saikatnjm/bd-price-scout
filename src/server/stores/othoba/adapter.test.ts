@@ -47,6 +47,19 @@ describe("othobaAdapter.search", () => {
     expect(results[0]).toMatchObject({ title: "Fresh Rice Bran Oil - 5ltr 4 Pcs Bundle", price: 3940 });
   });
 
+  it("does not require category descriptor words like 'cooking' in product names", async () => {
+    const fetchMock = mockStore();
+    const results = await othobaAdapter.search("cooking oil", ctx());
+    expect(requested(fetchMock)[0]).toBe("/oil");
+    expect(results.map((r) => r.storeProductId)).toContain("709817");
+  });
+
+  it("maps 'dishwashing' queries to the cleaning category", async () => {
+    const fetchMock = mockStore({ "/cleaning-supplies": () => htmlResponse("<html></html>") });
+    await othobaAdapter.search("dishwashing liquid", ctx());
+    expect(requested(fetchMock)).toEqual(["/cleaning-supplies"]);
+  });
+
   it("returns no results without any request for queries outside supported categories", async () => {
     const fetchMock = mockStore();
     await expect(othobaAdapter.search("iphone 16 128gb", ctx())).resolves.toEqual([]);
